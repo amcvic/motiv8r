@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AuthService } from '../auth.service';
+
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AuthComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
   private loginMode: boolean;
 
@@ -15,14 +17,28 @@ export class AuthComponent implements OnInit {
     if (!email || !username || !password) {
       return;
     }
-    console.log('signup fired');
+    this.authService.signup(email, username, password)
+      .subscribe((response) => {
+        this.authService.sessionToken = response.sessionToken;
+        localStorage.setItem('token', response.sessionToken);
+        this.authService.currentUser = response.user;
+        console.log(this.authService.currentUser);
+        console.log(`signed up & loggin in as user: ${response.user.username}`);
+      })
   }
 
   login(username: string, password: string): void {
     if (!username || !password) {
       return;
     }
-    console.log('login fired');
+    this.authService.login(username, password)
+      .subscribe((response) => {
+        this.authService.sessionToken = response.sessionToken;
+        localStorage.setItem('token', response.sessionToken);
+        this.authService.currentUser = response.user;
+        console.log(this.authService.currentUser);
+        console.log(`logged in as user: ${response.user.username}`);
+      })
   }
 
   toggle(): void {
