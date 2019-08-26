@@ -1,4 +1,4 @@
-<div *ngIf='!loginMode' class='container'>
+<form *ngIf='!loginMode' class='container' (submit)='$event.preventDefault();signup(email.value,username.value,password.value);email.value="";username.value="";password.value=""'>
   <h1 class='center'>Signup</h1>
   <mat-form-field appearance='outline'>
     <mat-label>E-mail</mat-label>
@@ -12,20 +12,20 @@
     <mat-label>Password</mat-label>
     <input #password matInput type='password' placeholder='password'/>
   </mat-form-field>
-  <button mat-button (click)='signup(email.value,username.value,password.value);email.value="";username.value="";password.value=""'>Submit</button>
-</div>
-<div *ngIf='loginMode' class='container'>
-    <h1>Login</h1>
-    <mat-form-field appearance='outline'>
-      <mat-label>Username</mat-label>
-      <input #username matInput placeholder='exampleuser'/>
-    </mat-form-field>
-    <mat-form-field appearance='outline'>
-      <mat-label>Password</mat-label>
-      <input #password matInput type='password' placeholder='password'/>
-    </mat-form-field>
-    <button *ngIf='loginMode' mat-button (click)='login(username.value, password.value);username.value="";password.value=""'>Submit</button>
-  </div>
+  <button mat-button type='submit'>Submit</button>
+</form>
+<form *ngIf='loginMode' class='container' (submit)='$event.preventDefault();login(username.value, password.value);username.value="";password.value=""'>
+  <h1>Login</h1>
+  <mat-form-field appearance='outline'>
+    <mat-label>Username</mat-label>
+    <input #username matInput placeholder='exampleuser'/>
+  </mat-form-field>
+  <mat-form-field appearance='outline'>
+    <mat-label>Password</mat-label>
+    <input #password matInput type='password' placeholder='password'/>
+  </mat-form-field>
+  <button *ngIf='loginMode' type='submit' mat-button>Submit</button>
+</form>
 <div class='outer-container'>
   <button mat-button (click)='toggle();'>Switch to Login</button>
 </div>

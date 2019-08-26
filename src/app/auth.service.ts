@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { User } from './user';
 import { Auth } from './auth';
 
@@ -10,7 +11,7 @@ import { Auth } from './auth';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public router: Router) { }
 
   public sessionToken: string;
   public currentUser: User;

@@ -24,6 +24,7 @@ export class AuthComponent implements OnInit {
         this.authService.currentUser = response.user;
         console.log(this.authService.currentUser);
         console.log(`signed up & loggin in as user: ${response.user.username}`);
+        this.authService.router.navigate(['/']);
       })
   }
 
@@ -38,6 +39,7 @@ export class AuthComponent implements OnInit {
         this.authService.currentUser = response.user;
         console.log(this.authService.currentUser);
         console.log(`logged in as user: ${response.user.username}`);
+        this.authService.router.navigate(['/']);
       })
   }
 
