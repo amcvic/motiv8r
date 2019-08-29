@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 75%;
+  margin: auto;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.outer-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: auto;
+  width: 75%;
+  padding: 20px;
+}
+
+.center {
+  text-align: center;
+}
