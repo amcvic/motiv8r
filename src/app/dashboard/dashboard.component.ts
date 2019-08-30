@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,9 +10,19 @@ import * as CanvasJS from './canvasjs.min';
 })
 export class DashboardComponent implements OnInit {
   
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
+  
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    this.dialog.open(NewMeetupComponent, dialogConfig);
+  }
 
   ngOnInit() {
+    this.openDialog();
     let chart = new CanvasJS.Chart("chartContainer", {
       animationEnabled: true,
       exportEnabled: true,
