@@ -1,0 +1,28 @@
+
+/* div {
+  align-content: center;
+} */
+
+.container {
+  display: flex;
+  align-content: center;
+  width: 10em;
+  /* height: 100px;
+  width: 200px; */
+  /* overflow: auto; */
+  }
+  
+  table {
+    width: 10em;
+    height: 1em;
+  }
+  
+
+/* .container {
+    display: flex;
+} */
+
+#chartContainer {
+    display: flex;
+    justify-content: flex-end;
+}
