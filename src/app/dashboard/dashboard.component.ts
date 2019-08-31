@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
 import { PeriodicElement } from '../periodictable';
+import { DashService } from './dash.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -39,7 +40,7 @@ export class DashboardComponent implements OnInit {
       },
 
       //fetch GET and .map() through data to find info.
-      
+
       data: [{
         type: "column",
         dataPoints: [
