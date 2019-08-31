@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
+
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 import { PeriodicElement } from '../periodictable';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -10,6 +14,17 @@ import { PeriodicElement } from '../periodictable';
 
 export class DashboardComponent implements OnInit {
   
+  constructor(private dialog: MatDialog) { }
+  
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    this.dialog.open(NewMeetupComponent, dialogConfig);
+  }
+
   //fetch GET from DB
 
   // ELEMENT_DATA: PeriodicElement[] = [
@@ -28,9 +43,8 @@ export class DashboardComponent implements OnInit {
   // displayedColumns = ['position', 'name', 'weight', 'symbol'];
   // dataSource = this.ELEMENT_DATA;
   
-  constructor() { }
-
   ngOnInit() {
+    this.openDialog();
     let chart = new CanvasJS.Chart("chartContainer", {
       animationEnabled: true,
       exportEnabled: true,

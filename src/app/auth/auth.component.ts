@@ -19,12 +19,16 @@ export class AuthComponent implements OnInit {
     }
     this.authService.signup(email, username, password)
       .subscribe((response) => {
-        this.authService.sessionToken = response.sessionToken;
-        localStorage.setItem('token', response.sessionToken);
-        this.authService.currentUser = response.user;
-        console.log(this.authService.currentUser);
-        console.log(`signed up & loggin in as user: ${response.user.username}`);
-        this.authService.router.navigate(['/']);
+        if (this.authService.sessionToken) {
+          this.authService.sessionToken = response.sessionToken;
+          localStorage.setItem('token', response.sessionToken);
+          this.authService.currentUser = response.user;
+          console.log(this.authService.currentUser);
+          console.log(`signed up & loggin in as user: ${response.user.username}`);
+          this.authService.router.navigate(['/']);
+        } else {
+          console.log('error happened');
+        }
       })
   }
 
