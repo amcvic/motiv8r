@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
+
+import { MeetupService } from '../meetup.service';
+import { LogService } from '../log.service';
 
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
@@ -10,10 +14,12 @@ import OlSourceVector from 'ol/source/Vector';
 import OlLayerVector from 'ol/layer/Vector';
 import OlStyle from 'ol/style/Style';
 import OlIcon from 'ol/style/Icon';
+import OlInteraction from 'ol/interaction/Interaction';
 import OlInteractionTranslate from 'ol/interaction/Translate';
 import OlCollection from 'ol/Collection';
 
-import { fromLonLat } from 'ol/proj';
+import { defaults } from 'ol/interaction';
+import { fromLonLat, transform } from 'ol/proj';
 
 @Component({
   selector: 'app-new-meetup',
@@ -33,11 +39,9 @@ export class NewMeetupComponent implements OnInit {
   vectorSource: OlSourceVector;
   markerLayer: OlLayerVector;
   translate: OlInteractionTranslate;
+  defaults: OlInteraction;
 
-  coordMarker: number[];
-  hit: boolean;
-
-  constructor() { }
+  constructor(public dialogRef: MatDialogRef<NewMeetupComponent>, private meetupService: MeetupService, private logService: LogService) { }
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -92,12 +96,39 @@ export class NewMeetupComponent implements OnInit {
       this.map = new OlMap({
         target: 'map',
         layers: [this.layer, this.markerLayer],
-        // interactions: [this.translate],
+        interactions: defaults().extend([
+          this.translate
+        ]),
         view: this.view
       });
 
     });
     
+  }
+
+  close() {
+    this.dialogRef.close('succesfully closed');
+  }
+
+  submit(name: string, description: string, date: string, time: string, prereqs: string): void {
+    console.log(transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326'));
+    if (!name || !description || !date || !time) {
+      return;
+    } else {
+      let coords: number[] = transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326');
+      let arr: string[] = [];
+      arr.push(prereqs);
+      let timestamp: string = date + ' ' + time + ':00-04';
+      this.meetupService.submitMeetup(name, description, timestamp, coords[0], coords[1], arr)
+        .subscribe((response) => {
+          console.log(response);
+        });
+      this.logService.createLog(name, timestamp)
+        .subscribe((response) => {
+          console.log(response);
+        })
+      this.close();
+    }
   }
 
 }
