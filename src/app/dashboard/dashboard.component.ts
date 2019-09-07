@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
   // displayedColumns = ['position', 'name', 'weight', 'symbol'];
   // dataSource = this.ELEMENT_DATA;
   
-  constructor(private meetupService: MeetupService) { }
+  constructor(private dialog: MatDialogConfig, private meetupService: MeetupService) { }
 
   showDashResponse():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
