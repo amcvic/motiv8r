@@ -22,6 +22,7 @@ export class AuthComponent implements OnInit {
         if (this.authService.sessionToken) {
           this.authService.sessionToken = response.sessionToken;
           localStorage.setItem('token', response.sessionToken);
+          localStorage.setItem('userid', ""+response.user.id);
           this.authService.currentUser = response.user;
           console.log(this.authService.currentUser);
           console.log(`signed up & loggin in as user: ${response.user.username}`);
@@ -40,12 +41,15 @@ export class AuthComponent implements OnInit {
       .subscribe((response) => {
         this.authService.sessionToken = response.sessionToken;
         localStorage.setItem('token', response.sessionToken);
+        localStorage.setItem('userid', ""+response.user.id);
         this.authService.currentUser = response.user;
         console.log(this.authService.currentUser);
         console.log(`logged in as user: ${response.user.username}`);
         this.authService.router.navigate(['/']);
       })
   }
+
+
 
   toggle(): void {
     this.loginMode = !this.loginMode;

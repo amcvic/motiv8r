@@ -5,3 +5,7 @@ export interface User {
   email: string;
   points: number;
 }
+
+export interface UserResponse {
+  user: User;
+}

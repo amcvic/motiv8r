@@ -1,0 +1,6 @@
+<div class='container'>
+  <mat-calendar class='calendar' #calendar [(selected)]="selectedDate" (monthSelected)="monthSelected($event)"
+    (selectedChange)="onDateChanged($event)">
+  </mat-calendar>
+  <div class='greeting'><h1>Hello, {{this.username}}</h1><br/><br/><br/><h2>Points: {{this.points}}</h2></div>
+</div>
