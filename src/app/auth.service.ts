@@ -5,6 +5,7 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { User } from './user';
 import { Auth } from './auth';
+import { UserResponse } from './user';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class AuthService {
 
   private signupUrl = 'http://localhost:3000/user/signup';
   private loginUrl = 'http://localhost:3000/user/login';
+  private userUrl = 'http://localhost:3000/user/';
 
   login (username: string, password: string): Observable<Auth> {
     return this.http.post<Auth>(this.loginUrl, {username: username, password: password}, this.httpOptions)
@@ -41,6 +43,13 @@ export class AuthService {
     localStorage.clear();
     this.sessionToken = null;
     this.currentUser = null;
+  }
+
+  getUser(id: number): Observable<UserResponse> {
+    return this.http.get<UserResponse>(this.userUrl + id, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<UserResponse>('get user'))
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
