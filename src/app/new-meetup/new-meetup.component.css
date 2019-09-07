@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  /* width: 75%; */
+  width: 400px;;
+  margin: 20px;
+}
+.outercontainer {
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}
+
+#map {
+  margin: 20px;
+  border: 1px solid black;
+  width: 400px;
+  height: 400px;
+}

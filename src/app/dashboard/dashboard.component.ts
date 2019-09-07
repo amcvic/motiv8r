@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
+
+import { MatDialog, MatDialogConfig } from '@angular/material';
+import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 import { PeriodicElement } from '../periodictable';
 import { MeetupService } from '../meetup.service';
 // import {MatDialog, MatDialogConfig } from '@angular/material';
 // import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -13,11 +17,18 @@ import { MeetupService } from '../meetup.service';
 
 export class DashboardComponent implements OnInit {
 
-  config: DashboardComponent;
-
   locationX: number;
   locationY: number;
-  
+    
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    this.dialog.open(NewMeetupComponent, dialogConfig);
+  }
+
   //fetch GET from DB
 
   // ELEMENT_DATA: PeriodicElement[] = [
