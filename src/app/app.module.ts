@@ -12,7 +12,8 @@ import { MatDialogModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material';
 import { MatNativeDateModule } from '@angular/material'
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { MatButtonModule } from '@angular/material/button';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ActiveMeetupsComponent } from './active-meetups/active-meetups.component';

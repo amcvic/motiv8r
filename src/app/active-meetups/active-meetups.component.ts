@@ -15,17 +15,17 @@
   constructor(private meetupService: MeetupService) { }
   
     ngOnInit() {
-      navigator.geolocation.getCurrentPosition((position) => {
-        this.locationX = position.coords.longitude;
-        this.locationY = position.coords.latitude;
-      })
+      // navigator.geolocation.getCurrentPosition((position) => {
+      //   this.locationX = position.coords.longitude;
+      //   this.locationY = position.coords.latitude;
+      // })
   }
-    this.getMeetups();
+  //   this.getMeetups();
   }
   
-  getMeetups(locationX, locationY): void {
-    this.meetupService.getMeetups(locationX, locationY)
-        .subscribe(meetups => (this.meetups = meetups))
-  }
+  // getMeetups(locationX, locationY): void {
+  //   this.meetupService.getMeetups(locationX, locationY)
+  //       .subscribe(meetups => (this.meetups = meetups))
+  // }
   
 

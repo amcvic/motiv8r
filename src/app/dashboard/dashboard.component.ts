@@ -5,8 +5,6 @@ import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 import { PeriodicElement } from '../periodictable';
 import { MeetupService } from '../meetup.service';
-// import {MatDialog, MatDialogConfig } from '@angular/material';
-// import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 
 
 @Component({
@@ -47,7 +45,7 @@ export class DashboardComponent implements OnInit {
   // displayedColumns = ['position', 'name', 'weight', 'symbol'];
   // dataSource = this.ELEMENT_DATA;
   
-  constructor(private dialog: MatDialogConfig, private meetupService: MeetupService) { }
+  constructor(private dialog: MatDialog, private meetupService: MeetupService) { }
 
   showDashResponse():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
