@@ -4,6 +4,9 @@ import * as CanvasJS from './canvasjs.min';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 import { PeriodicElement } from '../periodictable';
+import { MeetupService } from '../meetup.service';
+// import {MatDialog, MatDialogConfig } from '@angular/material';
+// import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 
 
 @Component({
@@ -13,9 +16,10 @@ import { PeriodicElement } from '../periodictable';
 })
 
 export class DashboardComponent implements OnInit {
-  
-  constructor(private dialog: MatDialog) { }
-  
+
+  locationX: number;
+  locationY: number;
+    
   openDialog() {
     const dialogConfig = new MatDialogConfig();
     
@@ -43,8 +47,51 @@ export class DashboardComponent implements OnInit {
   // displayedColumns = ['position', 'name', 'weight', 'symbol'];
   // dataSource = this.ELEMENT_DATA;
   
+  constructor(private meetupService: MeetupService) { }
+
+  showDashResponse():void {
+    this.meetupService.getMeetups(this.locationX, this.locationY)
+      .subscribe((response) => {
+        console.log(response);
+      });
+    // this.DashService.getDashResponse()
+    // // resp is of type `HttpResponse<Config>`
+    // // .subscribe(resp => {
+    // //   //display its headers
+    // //   const keys = resp.headers.keys();
+    // //   this.headers = keys.map(key => 
+    // //     `${key}: ${resp.headers.get(key)}`);)
+
+    //     //access the body directly, which is typed as 'Dash'.
+    // //     this.config = {resp.body}
+    // // }
+
+    // .subscribe((data: Dash) => this.dash = {
+    //   motiv8rUrl: data['motiv8rUrl'],
+    //   textfile: data['textfile']
+    // },
+    // error => this.error = error //error path
+    // );
+    
+  }
+
+  // openDialog() {
+  //   const dialogConfig = new MatDialogConfig();
+
+  //   dialogConfig.disableClose = true;
+  //   dialogConfig.autoFocus = true;
+
+  //   this.dialog.open(NewMeetupComponent, dialogConfig);
+  // }
+
   ngOnInit() {
-    this.openDialog();
+    // this.openDialog();
+    navigator.geolocation.getCurrentPosition((position) => {
+      this.locationX = position.coords.longitude;
+      this.locationY = position.coords.latitude;
+      console.log(this.locationX, this.locationY);
+      this.showDashResponse();
+    })
     let chart = new CanvasJS.Chart("chartContainer", {
       animationEnabled: true,
       exportEnabled: true,
@@ -53,7 +100,7 @@ export class DashboardComponent implements OnInit {
       },
 
       //fetch GET and .map() through data to find info.
-      
+
       data: [{
         type: "column",
         dataPoints: [
