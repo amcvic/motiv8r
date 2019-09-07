@@ -15,10 +15,9 @@ import { MatNativeDateModule } from '@angular/material'
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ActiveMeetupsComponent } from './active-meetups/active-meetups.component';
 import { NewMeetupComponent } from './new-meetup/new-meetup.component';
 import { LogComponent } from './log/log.component';
-
-
 
 @NgModule({
   declarations: [
@@ -26,6 +25,7 @@ import { LogComponent } from './log/log.component';
     AuthComponent,
     NavBarComponent,
     DashboardComponent,
+    ActiveMeetupsComponent,
     NewMeetupComponent,
     LogComponent
   ],

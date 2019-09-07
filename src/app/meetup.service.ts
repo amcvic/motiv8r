@@ -17,7 +17,6 @@ export class MeetupService {
 
   private meetupUrl = 'http://localhost:3000/meetup';
 
-
   submitMeetup (name: string, description: string, date: string, locationX: number, locationY: number, prereqs: string[]): Observable<Meetup> {
     return this.http.post<Meetup>(this.meetupUrl, {
       name: name,
