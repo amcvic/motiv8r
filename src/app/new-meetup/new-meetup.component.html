@@ -1,0 +1,52 @@
+
+<h2 mat-dialog-title>Meetup Details</h2>
+
+<div class='outercontainer'>
+<mat-dialog-content>
+  <div class='container'>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput
+      #name
+      placeholder='Quick jog'
+      formControlName='name'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput
+      #description
+      placeholder='Short run in Broad Ripple Park'
+      formControlName='description'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Date</mat-label>
+    <input matInput
+      #date
+      type='date'
+      formControlName='date'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Time</mat-label>
+    <input matInput
+      #time
+      type='time'
+      formControlName='time'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Prerequisites</mat-label>
+    <input matInput
+      #prereqs
+      placeholder='Shoes,Water'
+      formControlName='prerequisites'/>
+  </mat-form-field>
+</div>
+</mat-dialog-content>
+<div class='container'>
+  <div id='map' class='map'></div>  
+</div>
+</div>
+
+<mat-dialog-actions>
+  <button class='mat-raised-button' (click)='close()'>Close</button>
+  <button class='mat-raised-button mat-primary' (click)='submit(name.value, description.value, date.value, time.value, prereqs.value)'>Submit</button>
+</mat-dialog-actions>

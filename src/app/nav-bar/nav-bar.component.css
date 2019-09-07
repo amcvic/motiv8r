@@ -1,32 +1,20 @@
-a {
-    font-family: sans-serif;
-  }
-  
-  h1 {
-    font-family: sans-serif;
-    color: white;
-  }
-  
-  .navbar-brand {
+.nav-button a {
+    margin-right: 8px;
+    color: black;
     float: left;
-    padding: 8px;
-  }
-  ​
-  .nav-link {
-    float: left;
-    display: block;
     text-align: center;
-    padding: 14px 16px;
     text-decoration: none;
     font-size: 17px;
-  }
-  ​
-  .nav-link a:hover {
+    font-family: 'Raleway', sans-serif;
+}
+
+  h1 {
     color: black;
+    font-family: 'Raleway', sans-serif;
   }
   ​
   .nav-link a.active {
-    background-color: #990000;
+    background-color: red;
   }
   
   .container {
@@ -35,38 +23,9 @@ a {
     align-items: center;
     width: 100%;
     overflow: hidden;
-    border: 2px solid #990000;
-    border-radius: 50px;
-    background-color: #ff1a1a;
   }
-  ​
-  .nav-item {
-    display: block;
-    text-decoration: none;
-    float: left;
-    text-align: center;
-    padding: 14px 16px;
-    font-size: 17px;
-  }
-  ​
-  .nav-link a:hover {
-    color: black;
-    padding: 100%;
-    margin: 50%; 
-    font-size: 3px;
-  }
-  ​
-  ul {
-    justify-content: end;
-    margin: 0;
-    padding: 0;
-  }
-  ​
-  li {
-    float: left;
-    padding: 8px;
-  } 
   
-  .container {
-    overflow: hidden;
+  .nav-button a:hover {
+    color: #990000;
+    font-size: 17px;
   }

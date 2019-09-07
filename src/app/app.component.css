@@ -1,21 +1,20 @@
+.wrapper{
+    position: relative;
+    min-height: 100vh;
+  }
+  
+.page-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    font-family: 'Raleway', sans-serif;
+  }
 h1 {
     text-align: center;
+    font-family: 'Raleway', sans-serif;
   }
-  ​
-  footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    top: 20;
-    width: 100%;
-    background-color: #763a05;
-    color: white;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-  }
-  #background {
+
+  .background {
     width: 100%; 
     height: 100%; 
     position: fixed; 
@@ -28,3 +27,5 @@ h1 {
     width:100%;
     height:100%;
   }
+
+  
