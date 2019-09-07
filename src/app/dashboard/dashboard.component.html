@@ -7,20 +7,20 @@
         <!-- Name Column -->
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td mat-cell *matCellDef="let log"> {{log.name}} </td>
+          <td mat-cell *matCellDef="let meetup"> {{meetup.name}} </td>
         </ng-container>
 
         <!-- Date Column -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef> Date </th>
-          <td mat-cell *matCellDef="let log"> {{log.date}} </td>
+          <td mat-cell *matCellDef="let meetup"> {{meetup.date}} </td>
         </ng-container>
     
     
         <!-- Intensity Column -->
         <ng-container matColumnDef="intensity">
           <th mat-header-cell *matHeaderCellDef> Intensity </th>
-          <td mat-cell *matCellDef="let log"> {{log.intensity}} </td>
+          <td mat-cell *matCellDef="let meetup"> {{meetup.intensity}} </td>
         </ng-container>
     
         <!-- Symbol Column -->
@@ -32,7 +32,11 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
-    </div>
+  </div>
+
+  <div>
+    <button (click)="openDialog()">Create New Meetup</button>
+  </div>
 
   <div>
       <div id='chartContainer'class='container' style='height:370px;width:40%;'></div>
