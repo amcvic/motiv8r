@@ -16,6 +16,16 @@ export class LogService {
   }
 
   private logUrl = 'http://localhost:3000/log';
+  
+  public currentLog: Log;
+  public refreshLogs: boolean = false;
+
+  editLog (workout: string, length: number, intensity: number, log: string): Observable<Log> {
+    return this.http.put<Log>(this.logUrl + '/' + this.currentLog.id, {name: workout, length: length, intensity: intensity, review: log}, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<Log>('edit log'))
+      )
+  }
 
   createLog (name: string, date: string): Observable<Log> {
     return this.http.post<Log>(this.logUrl, {name: name, date: date}, this.httpOptions)

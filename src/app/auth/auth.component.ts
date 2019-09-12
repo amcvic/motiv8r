@@ -26,7 +26,7 @@ export class AuthComponent implements OnInit {
           this.authService.currentUser = response.user;
           console.log(this.authService.currentUser);
           console.log(`signed up & loggin in as user: ${response.user.username}`);
-          this.authService.router.navigate(['/']);
+          this.authService.router.navigate(['/dashboard']);
         } else {
           console.log('error happened');
         }
@@ -48,8 +48,6 @@ export class AuthComponent implements OnInit {
         this.authService.router.navigate(['/']);
       })
   }
-
-
 
   toggle(): void {
     this.loginMode = !this.loginMode;
