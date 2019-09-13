@@ -31,6 +31,11 @@ export class MeetupService {
     );
   }
 
+  getMeetups(locationX: number, locationY: number): Observable<Meetup[]>{
+      return this.http.post<Meetup[]>(this.meetupUrl + '/getall', {locationX: locationX, locationY: locationY}, this.httpOptions)
+        .pipe(catchError(this.handleError<Meetup[]>('get meetups')));
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: T): Observable<T> => {
       console.error(error);

@@ -1,7 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MatButtonModule} from '@angular/material/button';
 import {MatTableModule} from '@angular/material/table';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,13 +12,16 @@ import { MatDialogModule } from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { MatDatepickerModule } from '@angular/material';
 import { MatNativeDateModule } from '@angular/material'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
+import { MatButtonModule } from '@angular/material/button';
+import { MatSliderModule } from '@angular/material/slider';
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ActiveMeetupsComponent } from './active-meetups/active-meetups.component';
 import { NewMeetupComponent } from './new-meetup/new-meetup.component';
 import { LogComponent } from './log/log.component';
-
-
+import { LogDetailsComponent } from './log-details/log-details.component';
 
 @NgModule({
   declarations: [
@@ -28,8 +29,10 @@ import { LogComponent } from './log/log.component';
     AuthComponent,
     NavBarComponent,
     DashboardComponent,
+    ActiveMeetupsComponent,
     NewMeetupComponent,
-    LogComponent
+    LogComponent,
+    LogDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -42,11 +45,12 @@ import { LogComponent } from './log/log.component';
     MatDialogModule,
     HttpClientModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSliderModule
   ],
   
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [NewMeetupComponent]
+  entryComponents: [NewMeetupComponent, LogDetailsComponent]
 })
 export class AppModule { }
