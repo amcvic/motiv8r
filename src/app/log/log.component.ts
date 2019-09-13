@@ -61,16 +61,17 @@ export class LogComponent implements OnInit {
   }
 
   monthSelected(date): void {
-    console.log('hello');
-    console.log(date);
+    this.currentMonth = this.convertToDateTimeString(date).substring(0,7);
+    this.nextMonth = date.getFullYear()+"-"+("0"+(+date.getMonth()+2)).slice(-2);
+    this.getLogs(this.currentMonth, this.nextMonth);
   }
 
   dateSelected(date: Date): void {
 
     let currentDate: string = this.convertToDateTimeString(date);
 
-    console.log(currentDate.substring(0,7), +currentDate[6]+1);
-
+    //refreshes the local logs in case a user submits and then tries
+    //to view a log within the same calendar view
     if (this.logService.refreshLogs) {
       this.getLogs(this.currentMonth, this.nextMonth);
       this.logService.refreshLogs = false;
@@ -106,7 +107,6 @@ export class LogComponent implements OnInit {
         this.renderer.listen(button, "click", () => {
           this.currentMonth = this.convertToDateTimeString(this.calendar.activeDate).substring(0,7);
           this.nextMonth = this.calendar.activeDate.getFullYear()+"-"+("0"+(+this.calendar.activeDate.getMonth()+2)).slice(-2);
-          console.log(this.currentMonth, this.nextMonth);
           this.getLogs(this.currentMonth, this.nextMonth);
         });
       });
