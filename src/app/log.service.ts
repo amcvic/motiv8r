@@ -34,8 +34,8 @@ export class LogService {
       );
   }
 
-  getLogs (month: string): Observable<Log[]> {
-    return this.http.post<Log[]>(this.logUrl+'/getall', {minMonth: '2019-09', maxMonth: '2019-10'}, this.httpOptions)
+  getLogs (month: string, nextMonth: string): Observable<Log[]> {
+    return this.http.post<Log[]>(this.logUrl+'/getall', {minMonth: month, maxMonth: nextMonth}, this.httpOptions)
       .pipe(
         catchError(this.handleError<Log[]>('get logs'))
       )

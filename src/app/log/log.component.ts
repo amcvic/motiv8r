@@ -1,10 +1,10 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 
 import { AuthService } from '../auth.service';
 import { LogService } from '../log.service';
 import { Log } from '../log';
 
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig, MatCalendar } from '@angular/material';
 import { MatCalendarCellCssClasses } from '@angular/material';
 import { LogDetailsComponent } from '../log-details/log-details.component';
 
@@ -13,6 +13,7 @@ import { LogDetailsComponent } from '../log-details/log-details.component';
   templateUrl: './log.component.html',
   styleUrls: ['./log.component.css']
 })
+
 export class LogComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private renderer: Renderer2, private authService: AuthService, private logService: LogService) { }
@@ -20,13 +21,13 @@ export class LogComponent implements OnInit {
   private username: string;
   private points: number;
 
-  private dates: string[] = [];
   private logs: Log[] = [];
-  private calDays: HTMLCollectionOf<Element>;
-  private calNums: HTMLCollectionOf<Element>;
-  private match: Log;
+  private currentMonth: string = '';
+  private nextMonth: string = '';
 
-  openDialog() {
+  @ViewChild(MatCalendar, {static: false}) calendar: MatCalendar<Date>;
+
+  openDialog(): void {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -43,52 +44,40 @@ export class LogComponent implements OnInit {
       })
   }
 
-  getLogs(month: string): void {
-    this.logService.getLogs(month)
+  getLogs(month: string, nextMonth: string): void {
+    this.logService.getLogs(month, nextMonth)
       .subscribe((response) => {
         this.logs = response;
-        this.loadCalendar();
-        // if (this.calDays) {
-        //   var datesArray: string[] = this.dates;
-        //   Array.from(this.calDays).forEach((el, i) => {
-        //     let element: HTMLElement = el as HTMLElement;
-        //     element.click();//logs dates in array in db readable format
-
-        //     this.match = this.logs.find(function(el) {
-        //       return el.date.substring(0,10) === datesArray[i].substring(0,10);
-        //     });
-        //     if (this.match) {
-        //       this.calNums[i].className += ' mat-calendar-body-selected';
-        //     }
-        //   });
-        // }
+        this.calendar.updateTodaysDate();
       });
   }
 
-  loadCalendar() {
-    this.calDays = document.getElementsByClassName('mat-calendar-body-cell');
-    this.calNums = document.getElementsByClassName('mat-calendar-body-cell-content');
+  dateClass(): MatCalendarCellCssClasses {
+    return (date: Date): MatCalendarCellCssClasses => {
+      return this.logs.map(
+        log => new Date(log.date)
+      ).some(d => d.getDate() === date.getDate()) ? 'special-date' : '';
+    }
   }
 
-  monthSelected(date) {
+  monthSelected(date): void {
     console.log('hello');
     console.log(date);
   }
 
-  dateSelected(date: Date) {
+  dateSelected(date: Date): void {
 
-    let currentDate: string = (date.getFullYear() + '-' + 
-      ("0" + (+date.getMonth()+1)).slice(-2) + '-' + 
-      ("0" + (date.getDate())).slice(-2) + ' 00:00:00-04');
+    let currentDate: string = this.convertToDateTimeString(date);
+
+    console.log(currentDate.substring(0,7), +currentDate[6]+1);
 
     if (this.logService.refreshLogs) {
-      this.getLogs('month');
+      this.getLogs(this.currentMonth, this.nextMonth);
       this.logService.refreshLogs = false;
     }
 
     this.logs.forEach((el, i) => {
       if (currentDate.substring(0,10) === el.date.substring(0,10)) {
-        console.log('found log at', el.name);
         this.logService.currentLog = el;
         this.openDialog();
       }
@@ -96,8 +85,16 @@ export class LogComponent implements OnInit {
 
   }
 
+  convertToDateTimeString(date: Date): string {
+    return (date.getFullYear() + '-' + 
+    ("0" + (+date.getMonth()+1)).slice(-2) + '-' + 
+    ("0" + (date.getDate())).slice(-2) + ' 00:00:00-04');
+  }
+
   ngOnInit() {
-    this.getLogs('month');
+    this.currentMonth = this.convertToDateTimeString(new Date()).substring(0,7);
+    this.nextMonth = (new Date()).getFullYear()+"-"+("0"+(+(new Date()).getMonth()+2)).slice(-2);
+    this.getLogs(this.currentMonth, this.nextMonth);
     this.getUser(+localStorage.getItem('userid'));
   }
 
@@ -107,9 +104,10 @@ export class LogComponent implements OnInit {
     if (buttons) {
       Array.from(buttons).forEach(button => {
         this.renderer.listen(button, "click", () => {
-          this.dates = [];
-          this.loadCalendar();
-          console.log('Arrow button clicked');
+          this.currentMonth = this.convertToDateTimeString(this.calendar.activeDate).substring(0,7);
+          this.nextMonth = this.calendar.activeDate.getFullYear()+"-"+("0"+(+this.calendar.activeDate.getMonth()+2)).slice(-2);
+          console.log(this.currentMonth, this.nextMonth);
+          this.getLogs(this.currentMonth, this.nextMonth);
         });
       });
     }
