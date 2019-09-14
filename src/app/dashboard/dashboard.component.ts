@@ -16,6 +16,8 @@ export class DashboardComponent implements OnInit {
 
   locationX: number;
   locationY: number;
+
+  constructor(private dialog: MatDialog, private meetupService: MeetupService) { }
     
   openDialog() {
     const dialogConfig = new MatDialogConfig();
@@ -25,26 +27,14 @@ export class DashboardComponent implements OnInit {
 
     this.dialog.open(NewMeetupComponent, dialogConfig);
   }
-
-  //fetch GET from DB
-  
-  constructor(private dialog: MatDialog, private meetupService: MeetupService) { }
-
+    
   showDashResponse():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
       .subscribe((response) => {
         console.log(response);
       });
    }
-
-  // openDialog() {
-  //   const dialogConfig = new MatDialogConfig();
-
-  //   dialogConfig.disableClose = true;
-  //   dialogConfig.autoFocus = true;
-
-  //   this.dialog.open(NewMeetupComponent, dialogConfig);
-  // }
+    
 
   ngOnInit() {
     // this.openDialog();
@@ -60,8 +50,6 @@ export class DashboardComponent implements OnInit {
       title: {
         text: "Meetup Activity"
       },
-
-      //fetch GET and .map() through data to find info.
 
       data: [{
         type: "column",
