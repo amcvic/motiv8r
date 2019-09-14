@@ -10,6 +10,8 @@ import { APIURL } from '../environments/environment.prod';
 })
 export class MeetupService {
 
+  public currentMeetup: Meetup;
+
   constructor(private http: HttpClient) { }
 
   httpOptions = {

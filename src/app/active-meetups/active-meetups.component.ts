@@ -64,11 +64,13 @@ dateTrim() {
 
   makeMarker() {
     for (let i=0; i < this.meetups.length; i++) {
-      this.vectorSource.addFeature((new OlFeature({
+      let feature: OlFeature = (new OlFeature({
         geometry: new OlGeomPoint(
           fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY]) //** */
         )
-      })));
+      }));
+      feature.set('id', this.meetups[i].id)
+      this.vectorSource.addFeature(feature);
     }
     let features = this.vectorSource.getFeatures();
     console.log(features);
@@ -153,6 +155,21 @@ dateTrim() {
         layers: [this.layer, this.markerLayer],
         view: this.view
       });
+      let tempMap = this.map;
+      let tempMeetups = this.meetups;
+      let currentMeetup: Meetup;
+      this.map.on('singleclick', function(e) {
+        tempMap.forEachFeatureAtPixel(e.pixel, function(feature) {
+          console.log(feature.get('id'));
+          tempMeetups.forEach(e => {
+            if (e.id === feature.get('id')) {
+              currentMeetup = e;
+              console.log(e);
+            }
+          })
+        })
+      });
+      this.meetupService.currentMeetup = currentMeetup;
       console.log('map should be loaded');
       this.showActiveMeetups();
       
@@ -167,52 +184,3 @@ dateTrim() {
   }
 
 }
-  
-  
-  
-      // this.translate.on('translating', function (evt) {
-      //   this.coordMarker = this.marker.getGeometry().getCoordinates();
-      //   console.log(this.coordMarker);
-      // });
-
-    
-
-  //   for (var i=0; i<10; i++) {
-  //   this.vectorSource.addFeature(new OlFeature({
-  //     geometry: new OlGeomPoint(
-  //       fromLonLat([this.longitude, this.latitude]) //** */
-  //     )
-  //   }));
-  // }
-
-    // this.marker.setStyle(new OlStyle({
-    //   image: new OlIcon(({
-    //     anchor: [0.5,1],
-    //     crossOrigin: 'anonymous',
-    //     scale: 0.07,
-    //     src: '../../assets/map-marker.png'
-    //   }))
-    // }));
-
-  
-
-  // submit(name: string, description: string, date: string, time: string, prereqs: string): void {
-  //   console.log(transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326'));
-  //   if (!name || !description || !date || !time) {
-  //     return;
-  //   } else {
-  //     let coords: number[] = transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326');
-  //     let arr: string[] = [];
-  //     arr.push(prereqs);
-  //     let timestamp: string = date + ' ' + time + ':00-04';
-  //     this.meetupService.submitMeetup(name, description, timestamp, coords[0], coords[1], arr)
-  //       .subscribe((response) => {
-  //         console.log(response);
-  //       });
-  //     this.logService.createLog(name, timestamp)
-  //       .subscribe((response) => {
-  //         console.log(response);
-  //       })
-  //     this.close();
-  //   }
-  // }
