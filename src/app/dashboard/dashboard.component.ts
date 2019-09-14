@@ -3,7 +3,6 @@ import * as CanvasJS from './canvasjs.min';
 
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
-import { PeriodicElement } from '../periodictable';
 import { MeetupService } from '../meetup.service';
 
 
@@ -28,14 +27,14 @@ export class DashboardComponent implements OnInit {
 
     this.dialog.open(NewMeetupComponent, dialogConfig);
   }
-  
+    
   showDashResponse():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
       .subscribe((response) => {
         console.log(response);
       });
+   }
     
-  }
 
   ngOnInit() {
     // this.openDialog();
@@ -61,11 +60,6 @@ export class DashboardComponent implements OnInit {
           { y: 4, label: "Week 4" },
           { y: 5, label: "Week 5" },
           { y: 6, label: "Week 6" },
-          // { y: 95, label: "Week 5" },
-          // { y: 68, label: "Week 6" },
-          // { y: 28, label: "Week 7" },
-          // { y: 34, label: "Week 8" },
-          // { y: 14, label: "Week 9" }
         ]
       }]
     });
