@@ -9,6 +9,8 @@ import { Meetup } from './meetup';
 })
 export class MeetupService {
 
+  public currentMeetup: Meetup;
+
   constructor(private http: HttpClient) { }
 
   httpOptions = {
