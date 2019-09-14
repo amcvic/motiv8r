@@ -1,5 +1,5 @@
 {
-  "name": "am-motiv8r",
+  "name": "motiv8r",
   "version": "0.0.0",
   "engines": {
     "node": "12.2.0"
@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ng build --prod",
-    "start": "serve -s dist/am-motiv8r"
+    "start": "serve -s dist/motiv8r"
   },
   "private": true,
   "dependencies": {
