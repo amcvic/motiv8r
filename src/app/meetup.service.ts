@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Meetup } from './meetup';
+import { APIURL } from '../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -15,10 +16,10 @@ export class MeetupService {
     headers: new HttpHeaders({'Content-Type': 'application/json', 'Authorization': localStorage.getItem('token')})
   }
 
-  private meetupUrl = 'http://localhost:3000/meetup';
+  private meetupUrl = '/meetup';
 
   submitMeetup (name: string, description: string, date: string, locationX: number, locationY: number, prereqs: string[]): Observable<Meetup> {
-    return this.http.post<Meetup>(this.meetupUrl, {
+    return this.http.post<Meetup>(APIURL+this.meetupUrl, {
       name: name,
       description: description,
       date: date,
@@ -32,7 +33,7 @@ export class MeetupService {
   }
 
   getMeetups(locationX: number, locationY: number): Observable<Meetup[]>{
-      return this.http.post<Meetup[]>(this.meetupUrl + '/getall', {locationX: locationX, locationY: locationY}, this.httpOptions)
+      return this.http.post<Meetup[]>(APIURL+this.meetupUrl + '/getall', {locationX: locationX, locationY: locationY}, this.httpOptions)
         .pipe(catchError(this.handleError<Meetup[]>('get meetups')));
   }
 
