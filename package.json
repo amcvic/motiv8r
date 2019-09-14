@@ -1,18 +1,24 @@
 {
-  "name": "motiv8r",
+  "name": "am-motiv8r",
   "version": "0.0.0",
+  "engines": {
+    "node": "12.2.0"
+  },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "postinstall": "ng build --prod",
+    "start": "serve -s dist/am-motiv8r"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "^8.2.3",
     "@angular/cdk": "^8.1.4",
+    "@angular/cli": "~8.2.0",
+    "@angular/compiler-cli": "~8.2.0",
     "@angular/common": "~8.2.0",
     "@angular/compiler": "~8.2.0",
     "@angular/core": "~8.2.0",

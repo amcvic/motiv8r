@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { User } from './user';
 import { Auth } from './auth';
 import { UserResponse } from './user';
+import { APIURL } from '../environments/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -21,19 +22,19 @@ export class AuthService {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
   }
 
-  private signupUrl = 'http://localhost:3000/user/signup';
-  private loginUrl = 'http://localhost:3000/user/login';
-  private userUrl = 'http://localhost:3000/user/';
+  private signupUrl = '/user/signup';
+  private loginUrl = '/user/login';
+  private userUrl = '/user/';
 
   login (username: string, password: string): Observable<Auth> {
-    return this.http.post<Auth>(this.loginUrl, {username: username, password: password}, this.httpOptions)
+    return this.http.post<Auth>(APIURL+this.loginUrl, {username: username, password: password}, this.httpOptions)
     .pipe(
       catchError(this.handleError<Auth>('login'))
     );
   }
 
   signup (email: string, username: string, password: string): Observable<Auth> {
-    return this.http.post<Auth>(this.signupUrl, {email: email, username: username, password: password}, this.httpOptions)
+    return this.http.post<Auth>(APIURL+this.signupUrl, {email: email, username: username, password: password}, this.httpOptions)
     .pipe(
       catchError(this.handleError<Auth>('signup'))
     );
@@ -46,7 +47,7 @@ export class AuthService {
   }
 
   getUser(id: number): Observable<UserResponse> {
-    return this.http.get<UserResponse>(this.userUrl + id, this.httpOptions)
+    return this.http.get<UserResponse>(APIURL+this.userUrl + id, this.httpOptions)
       .pipe(
         catchError(this.handleError<UserResponse>('get user'))
       );
