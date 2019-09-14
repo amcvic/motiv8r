@@ -18,9 +18,9 @@
     "@angular/animations": "^8.2.3",
     "@angular/cdk": "^8.1.4",
     "@angular/cli": "~8.2.0",
-    "@angular/compiler-cli": "~8.2.0",
     "@angular/common": "~8.2.0",
     "@angular/compiler": "~8.2.0",
+    "@angular/compiler-cli": "~8.2.0",
     "@angular/core": "~8.2.0",
     "@angular/forms": "~8.2.0",
     "@angular/material": "^8.1.4",
@@ -34,6 +34,7 @@
     "moment": "^2.24.0",
     "ol": "^5.3.3",
     "rxjs": "~6.4.0",
+    "serve": "^11.1.0",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
