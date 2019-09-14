@@ -11,7 +11,7 @@ export class AuthComponent implements OnInit {
 
   constructor(private authService: AuthService) { }
 
-  private loginMode: boolean;
+  public loginMode: boolean;
 
   signup(email: string, username: string, password: string): void {
     if (!email || !username || !password) {

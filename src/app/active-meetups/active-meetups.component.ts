@@ -50,8 +50,8 @@ import { map } from 'rxjs/operators';
   translate: OlInteractionTranslate;
   defaults: OlInteraction;
 
-  private activeMeets: boolean = false;
-  private mapLoaded: boolean = false;
+  public activeMeets: boolean = false;
+  public mapLoaded: boolean = false;
 
   constructor(private renderer: Renderer2, private meetupService: MeetupService) { }
 
