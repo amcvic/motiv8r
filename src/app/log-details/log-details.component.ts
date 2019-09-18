@@ -11,7 +11,7 @@ import { LogService } from '../log.service';
 })
 export class LogDetailsComponent implements OnInit {
 
-  constructor(public dialogRef: MatDialogRef<LogDetailsComponent>, private logService: LogService) { }
+  constructor(public dialogRef: MatDialogRef<LogDetailsComponent>, public logService: LogService) { }
 
   ngOnInit() {
   }
