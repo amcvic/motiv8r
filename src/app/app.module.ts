@@ -22,6 +22,14 @@ import { ActiveMeetupsComponent } from './active-meetups/active-meetups.componen
 import { NewMeetupComponent } from './new-meetup/new-meetup.component';
 import { LogComponent } from './log/log.component';
 import { LogDetailsComponent } from './log-details/log-details.component';
+import { MeetupDetailsComponent } from './meetup-details/meetup-details.component';
+
+import { AuthGuard } from './auth/auth.guard';
+import { JwtModule } from '@auth0/angular-jwt';
+
+export function tokenGetter() {
+  return localStorage.getItem('access_token');
+}
 
 @NgModule({
   declarations: [
@@ -32,7 +40,8 @@ import { LogDetailsComponent } from './log-details/log-details.component';
     ActiveMeetupsComponent,
     NewMeetupComponent,
     LogComponent,
-    LogDetailsComponent
+    LogDetailsComponent,
+    MeetupDetailsComponent
   ],
   imports: [
     BrowserModule,
@@ -46,11 +55,16 @@ import { LogDetailsComponent } from './log-details/log-details.component';
     HttpClientModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSliderModule
+    MatSliderModule,
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter
+      }
+    })
   ],
   
-  providers: [],
+  providers: [AuthGuard],
   bootstrap: [AppComponent],
-  entryComponents: [NewMeetupComponent, LogDetailsComponent]
+  entryComponents: [NewMeetupComponent, LogDetailsComponent, MeetupDetailsComponent]
 })
 export class AppModule { }
