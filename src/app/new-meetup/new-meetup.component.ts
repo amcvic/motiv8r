@@ -3,6 +3,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 
 import { MeetupService } from '../meetup.service';
 import { LogService } from '../log.service';
+import { AuthService } from '../auth.service';
 
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
@@ -41,13 +42,18 @@ export class NewMeetupComponent implements OnInit {
   translate: OlInteractionTranslate;
   defaults: OlInteraction;
 
-  constructor(public dialogRef: MatDialogRef<NewMeetupComponent>, private meetupService: MeetupService, private logService: LogService) { }
+  constructor(public dialogRef: MatDialogRef<NewMeetupComponent>, public meetupService: MeetupService, private logService: LogService, private authService: AuthService) { }
 
   ngOnInit() {
     navigator.geolocation.getCurrentPosition((position) => {
       console.log("Latitude:", position.coords.latitude, "\nLongitude:", position.coords.longitude);
-      this.latitude = position.coords.latitude;
-      this.longitude = position.coords.longitude;
+      if (this.meetupService.editMode) {
+        this.latitude = this.meetupService.currentMeetup.locationY;
+        this.longitude = this.meetupService.currentMeetup.locationX;
+      } else {
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+      }
       this.source = new OlXYZ({
         url: 'http://tile.osm.org/{z}/{x}/{y}.png'
       });
@@ -102,8 +108,14 @@ export class NewMeetupComponent implements OnInit {
         view: this.view
       });
 
+      this.fetchAndSetPlaces();
+
     });
     
+  }
+
+  fetchAndSetPlaces(): void {
+
   }
 
   close() {
@@ -115,18 +127,31 @@ export class NewMeetupComponent implements OnInit {
     if (!name || !description || !date || !time) {
       return;
     } else {
+
       let coords: number[] = transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326');
       let arr: string[] = [];
       arr.push(prereqs);
       let timestamp: string = date + ' ' + time + ':00-04';
-      this.meetupService.submitMeetup(name, description, timestamp, coords[0], coords[1], arr)
-        .subscribe((response) => {
-          console.log(response);
-        });
-      this.logService.createLog(name, timestamp)
-        .subscribe((response) => {
-          console.log(response);
-        })
+
+      if (this.meetupService.editMode) {
+        this.meetupService.editMeetup(name, description, timestamp, coords[0], coords[1], arr, this.meetupService.currentMeetup.id)
+          .subscribe((response) => {
+            console.log(response);
+          });
+      } else {
+        this.meetupService.submitMeetup(name, description, timestamp, coords[0], coords[1], arr)
+          .subscribe((response) => {
+            console.log(response);
+          });
+        this.logService.createLog(name, timestamp)
+          .subscribe((response) => {
+            console.log(response);
+          });
+        this.authService.addPoints(1)
+          .subscribe((response) => {
+            console.log(response);
+          });
+      }
       this.close();
     }
   }

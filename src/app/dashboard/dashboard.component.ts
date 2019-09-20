@@ -1,11 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
 
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {MatSnackBar,MatSnackBarModule} from '@angular/material/snack-bar';
+
+import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material';
 import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 
 import { MeetupService } from '../meetup.service';
+
 import { Meetup } from '../meetup';
+import { MeetupDetailsComponent } from '../meetup-details/meetup-details.component';
 
 
 @Component({
@@ -28,34 +33,51 @@ export class DashboardComponent implements OnInit {
   chart: string[];
     
   openDialog() {
+    this.meetupService.editMode = false;
     const dialogConfig = new MatDialogConfig();
     
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
-    this.dialog.open(NewMeetupComponent, dialogConfig);
+    let dialogRef: MatDialogRef<NewMeetupComponent> = this.dialog.open(NewMeetupComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      this.showDashResponse();
+    })
   }
 
-  constructor(private dialog: MatDialog, private meetupService: MeetupService) { }
+  constructor(private dialog: MatDialog, private meetupService: MeetupService, private snackBar: MatSnackBar) { }
 
-  dateTrim(myMeets) {
-    //modify the yyyy/mo/day format to populate on the page.
-    for(let i = 0; i < myMeets.length; i++) {
-      myMeets[i].date = myMeets[i].date.substring(0, 10);
-      console.log(myMeets[i].date);
-    }
-  };
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 1000
+    });
+  }
+
+  openDialogInEditMode(meetup: Meetup) {
+    console.log(meetup);
+    this.meetupService.currentMeetup = meetup;
+    this.meetupService.editMode = true;
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    let dialogRef: MatDialogRef<NewMeetupComponent> = this.dialog.open(NewMeetupComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(() => {
+      this.showDashResponse();
+    })
+  }
     
   showDashResponse():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
       .subscribe((response) => {
-        // console.log(response);
-        this.myMeets = (response);
+        this.myMeets = (response.filter((meetup) => {
+          console.log(meetup.owner, +localStorage.getItem('userid'));
+          return meetup.owner == +localStorage.getItem('userid');
+        }));
         console.log(this.myMeets);
-        this.displayedColumns = ['name', 'date', 'description'];
-    // console.log(this.myMeets);
-    this.dateTrim(this.myMeets);
-    this.dataSource = this.myMeets;
+        this.displayedColumns = ['name', 'date', 'description', 'delete'];
+        this.dataSource = this.myMeets;
       });
   };
 
@@ -68,6 +90,14 @@ export class DashboardComponent implements OnInit {
       this.chart = []
     })
   };
+
+  deleteMeetup(meetup): void {
+    this.meetupService.deleteMeetup(meetup.id)
+      .subscribe((response) => {
+        console.log(response);
+        this.showDashResponse();
+      });
+  }
     
   ngOnInit() {
 

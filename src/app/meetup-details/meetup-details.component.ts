@@ -25,8 +25,6 @@ import { Meetup } from '../meetup';
 })
 export class MeetupDetailsComponent implements OnInit {
 
-  editMode: boolean = false;
-
   map: OlMap;
   source: OlXYZ;
   layer: OlTileLayer;
@@ -87,6 +85,10 @@ export class MeetupDetailsComponent implements OnInit {
     });
 
   }
+
+  // addToMeetup(): void {
+  //   this.meetupService.addToMeetup(+localStorage.getItem('userid'))
+  // }
 
   close() {
     this.dialogRef.close('successfully closed');

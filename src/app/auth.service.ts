@@ -59,6 +59,13 @@ export class AuthService {
       );
   }
 
+  addPoints(pts: number): Observable<UserResponse> {
+    return this.http.put<UserResponse>(APIURL+this.userUrl+'/addPoint/'+localStorage.getItem('userid'), {points: pts}, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<UserResponse>('add points'))
+      )
+  }
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: T): Observable<T> => {
       console.error(error);

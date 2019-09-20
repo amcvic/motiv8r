@@ -15,6 +15,7 @@ import { MatNativeDateModule } from '@angular/material'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { MatButtonModule } from '@angular/material/button';
 import { MatSliderModule } from '@angular/material/slider';
+import { MatSnackBarModule } from '@angular/material';
 
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -56,6 +57,7 @@ export function tokenGetter() {
     MatDatepickerModule,
     MatNativeDateModule,
     MatSliderModule,
+    MatSnackBarModule,
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter
