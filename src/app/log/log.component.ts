@@ -47,7 +47,11 @@ export class LogComponent implements OnInit {
   getLogs(month: string, nextMonth: string): void {
     this.logService.getLogs(month, nextMonth)
       .subscribe((response) => {
-        this.logs = response;
+        if (response) {
+          this.logs = response.filter((log) => {
+            return log.owner == +localStorage.getItem('userid');
+          });
+        }
         this.calendar.updateTodaysDate();
       });
   }
@@ -63,6 +67,9 @@ export class LogComponent implements OnInit {
   monthSelected(date): void {
     this.currentMonth = this.convertToDateTimeString(date).substring(0,7);
     this.nextMonth = date.getFullYear()+"-"+("0"+(+date.getMonth()+2)).slice(-2);
+    if (this.nextMonth.substring(5,7) == '13') {
+      this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+    }
     this.getLogs(this.currentMonth, this.nextMonth);
   }
 
@@ -95,6 +102,9 @@ export class LogComponent implements OnInit {
   ngOnInit() {
     this.currentMonth = this.convertToDateTimeString(new Date()).substring(0,7);
     this.nextMonth = (new Date()).getFullYear()+"-"+("0"+(+(new Date()).getMonth()+2)).slice(-2);
+    if (this.nextMonth.substring(5,7) == '13') {
+      this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+    }
     this.getLogs(this.currentMonth, this.nextMonth);
     this.getUser(+localStorage.getItem('userid'));
   }
@@ -107,6 +117,9 @@ export class LogComponent implements OnInit {
         this.renderer.listen(button, "click", () => {
           this.currentMonth = this.convertToDateTimeString(this.calendar.activeDate).substring(0,7);
           this.nextMonth = this.calendar.activeDate.getFullYear()+"-"+("0"+(+this.calendar.activeDate.getMonth()+2)).slice(-2);
+          if (this.nextMonth.substring(5,7) == '13') {
+            this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+          }
           this.getLogs(this.currentMonth, this.nextMonth);
         });
       });

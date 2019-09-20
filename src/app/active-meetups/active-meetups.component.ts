@@ -81,7 +81,7 @@ export class ActiveMeetupsComponent implements OnInit {
           fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY]) //** */
         )
       }));
-      feature.set('id', this.meetups[i].id)
+      feature.set('id', this.meetups[i].id);
       this.vectorSource.addFeature(feature);
     }
 

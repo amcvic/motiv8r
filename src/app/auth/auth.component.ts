@@ -39,7 +39,6 @@ export class AuthComponent implements OnInit {
     }
     this.authService.login(username, password)
       .subscribe((response) => {
-        this.authService.sessionToken = response.sessionToken;
         localStorage.setItem('token', response.sessionToken);
         localStorage.setItem('userid', ""+response.user.id);
         this.authService.currentUser = response.user;
