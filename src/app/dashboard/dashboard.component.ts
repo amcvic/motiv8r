@@ -47,13 +47,13 @@ export class DashboardComponent implements OnInit {
   private month: string = '';
   private nextMonth: string = '';
 
-  dateTrim(myMeets) {
-    //modify the yyyy/mo/day format to populate on the page.
-    for(let i = 0; i < myMeets.length; i++) {
-      myMeets[i].date = myMeets[i].date.substring(0, 10);
-      console.log(myMeets[i].date);
-    }
-  };
+  // dateTrim(myMeets) {
+  //   //modify the yyyy/mo/day format to populate on the page.
+  //   for(let i = 0; i < myMeets.length; i++) {
+  //     myMeets[i].date = myMeets[i].date.substring(0, 10);
+  //     console.log(myMeets[i].date);
+  //   }
+  // };
     
   showDashResponse():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
           });
         this.displayedColumns = ['name', 'date', 'description'];
     // console.log(this.myMeets);
-    this.dateTrim(this.myMeets);
+    // this.dateTrim(this.myMeets);
     // this.myMeets = (response);
         
     // const now = Date.now();
