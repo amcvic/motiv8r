@@ -1,0 +1,58 @@
+<h2 mat-dialog-title>Meetup Details</h2>
+
+<div class='outercontainer'>
+<mat-dialog-content>
+  <div class='container'>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput
+      [readonly]=true
+      #name
+      value={{this.meetupService.currentMeetup.name}}
+      formControlName='name'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+    <input matInput
+      [readonly]=true
+      #description
+      value={{this.meetupService.currentMeetup.description}}
+      formControlName='description'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Date</mat-label>
+    <input matInput
+      [readonly]=true
+      #date
+      type='date'
+      value={{this.meetupService.currentMeetup.date.substring(0,10)}}
+      formControlName='date'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Time</mat-label>
+    <input matInput
+      [readonly]=true
+      #time
+      type='time'
+      value={{this.meetupService.currentMeetup.date.substring(11,19)}}
+      formControlName='time'/>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Prerequisites</mat-label>
+    <input matInput
+      [readonly]=true
+      #prereqs
+      value={{this.meetupService.currentMeetup.prereqs}}
+      formControlName='prerequisites'/>
+  </mat-form-field>
+</div>
+</mat-dialog-content>
+<div class='container'>
+  <div id='map2' class='map2'></div>  
+</div>
+<div style='display:none' id='currentMeetup'></div>
+</div>
+<mat-dialog-actions>
+  <button class='mat-raised-button' (click)='close()'>Close</button>
+  <button mat-button (click)='addToMeetup()'>+</button>
+</mat-dialog-actions>
