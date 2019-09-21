@@ -52,6 +52,13 @@ export class AuthService {
     this.currentUser = null;
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(APIURL+this.userUrl, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<User[]>('get user'))
+      );
+  }
+
   getUser(id: number): Observable<UserResponse> {
     return this.http.get<UserResponse>(APIURL+this.userUrl + id, this.httpOptions)
       .pipe(
@@ -64,6 +71,13 @@ export class AuthService {
       .pipe(
         catchError(this.handleError<UserResponse>('add points'))
       )
+  }
+
+  deleteUser(id: number): Observable<UserResponse> {
+    return this.http.delete<UserResponse>(APIURL+this.userUrl + '/' + id, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<UserResponse>('get user'))
+      );
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
