@@ -1,5 +1,17 @@
 # Motiv8r
 
+A Motivational workout meetup application that connects you with like-minded people and logs your workouts.
+
+- Add workouts to a map based on your location with a workout-focused activity that you plan on doing
+- Find meetups in your area and add yourself to them to meet up with fellow exercisers
+- Log your intensity level and review of your workout to track your progress
+
+TO INSTALL:
+run 'npm install' in the client directory
+then 'ng serve' to serve it
+
+make sure your back-end is running as well!
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.2.0.
 
 ## Development server

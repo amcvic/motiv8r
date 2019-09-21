@@ -2,51 +2,144 @@
 <h2 mat-dialog-title>Meetup Details</h2>
 
 <div class='outercontainer'>
+
 <mat-dialog-content>
-  <div class='container'>
+
+  <!-- <div class='container'> -->
+
+  <form class='container' *ngIf='!this.meetupService.editMode'>
+
   <mat-form-field>
+
     <mat-label>Name</mat-label>
-    <input matInput
+
+    <input
+      matInput
       #name
       placeholder='Quick jog'
       formControlName='name'/>
+
   </mat-form-field>
+
   <mat-form-field>
+
     <mat-label>Description</mat-label>
-    <input matInput
+
+    <input
+      matInput
       #description
       placeholder='Short run in Broad Ripple Park'
       formControlName='description'/>
+
   </mat-form-field>
+
   <mat-form-field>
+
     <mat-label>Date</mat-label>
-    <input matInput
+
+    <input
+      matInput
       #date
       type='date'
       formControlName='date'/>
+
   </mat-form-field>
+
   <mat-form-field>
+
     <mat-label>Time</mat-label>
-    <input matInput
+
+    <input
+      matInput
       #time
       type='time'
       formControlName='time'/>
+
   </mat-form-field>
+
   <mat-form-field>
+
     <mat-label>Prerequisites</mat-label>
-    <input matInput
+
+    <input
+      matInput
       #prereqs
       placeholder='Shoes,Water'
       formControlName='prerequisites'/>
+
   </mat-form-field>
-</div>
+
+  <button class='mat-raised-button' (click)='$event.preventDefault();close()'>Close</button>
+  <button class='mat-raised-button mat-primary' (click)='$event.preventDefault();submit(name.value, description.value, date.value, time.value, prereqs.value)'>Submit</button>
+
+</form>
+
+<form class='container' *ngIf='this.meetupService.editMode'>
+
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+
+    <input 
+      matInput
+      #nameEdit
+      value='{{this.meetupService.currentMeetup.name}}'
+      formControlName='name'/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Description</mat-label>
+
+    <input
+      matInput
+      #descriptionEdit
+      value='{{this.meetupService.currentMeetup.description}}'
+      formControlName='description'/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Date</mat-label>
+
+    <input
+      matInput
+      #dateEdit
+      type='date'
+      value='{{this.meetupService.currentMeetup.date.substring(0,10)}}'
+      formControlName='date'/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Time</mat-label>
+
+    <input
+      matInput
+      #timeEdit
+      type='time'
+      value={{this.meetupService.currentMeetup.date.substring(11,19)}}
+      formControlName='time'/>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Prerequisites</mat-label>
+
+    <input
+      matInput
+      #prereqsEdit
+      value='{{this.meetupService.currentMeetup.prereqs}}'
+      formControlName='prerequisites'/>
+  </mat-form-field>
+  <button class='mat-raised-button' (click)='$event.preventDefault();close()'>Close</button>
+  <button class='mat-raised-button mat-primary' (click)='$event.preventDefault();submit(nameEdit.value, descriptionEdit.value, dateEdit.value, timeEdit.value, prereqsEdit.value)'>Submit</button>
+</form>
+
+<!-- </div> -->
 </mat-dialog-content>
+
 <div class='container'>
   <div id='map' class='map'></div>  
 </div>
+
 </div>
 
-<mat-dialog-actions>
-  <button class='mat-raised-button' (click)='close()'>Close</button>
-  <button class='mat-raised-button mat-primary' (click)='submit(name.value, description.value, date.value, time.value, prereqs.value)'>Submit</button>
-</mat-dialog-actions>
+<!-- <mat-dialog-actions> -->
+
+<!-- </mat-dialog-actions> -->
