@@ -6,7 +6,6 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MeetupDetailsComponent} from '../meetup-details/meetup-details.component';
 import {MeetupService} from '../meetup.service';
 import {Meetup} from '../meetup';
-import { LogService } from '../log.service';
 
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
@@ -44,8 +43,6 @@ export class ActiveMeetupsComponent implements OnInit {
   source: OlXYZ;
   layer: OlTileLayer;
   view: OlView;
-  // latitude: number;
-  // longitude: number;
 
   currentLocationMarker: OlFeature;
   vectorSource: OlSourceVector;
@@ -74,11 +71,11 @@ export class ActiveMeetupsComponent implements OnInit {
     }
   }
 
-  makeMarker() {
-    for (let i=0; i < this.meetups.length; i++) {
-      let feature: OlFeature = (new OlFeature({
-        geometry: new OlGeomPoint(
-          fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY]) //** */
+makeMarker() {
+  for (let i=0; i < this.meetups.length; i++) {
+    let feature: OlFeature = (new OlFeature({
+      geometry: new OlGeomPoint(
+        fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY])
         )
       }));
       feature.set('id', this.meetups[i].id);
@@ -108,10 +105,19 @@ export class ActiveMeetupsComponent implements OnInit {
     this.meetupService.getMeetups(this.locationX, this.locationY)
       .subscribe((response) => { 
         this.meetups = (response);
+        this.meetups = this.meetups.filter(function(meetup) {
+          console.log(meetup);
+          if(meetup) {
+            var dt = new Date();
+            var df = new Date(meetup.date);
+            if(df.getTime() > dt.getTime())
+              return df;
+            }
+        })
         console.log(this.meetups);
         this.displayedColumns= ['name', 'date', 'description'];
 
-        // this.dateTrim();
+        this.dateTrim();
         this.makeMarker();
         this.dataSource = this.meetups;
 
@@ -152,7 +158,7 @@ export class ActiveMeetupsComponent implements OnInit {
       this.source = new OlXYZ({
         url: 'http://tile.osm.org/{z}/{x}/{y}.png'
       })
-  
+
       this.layer = new OlTileLayer({
         source: this.source
       });
@@ -193,15 +199,11 @@ export class ActiveMeetupsComponent implements OnInit {
 
       console.log('map should be loaded');
       this.showActiveMeetups();
-      
-    });
-
+    })
     if (!this.activeMeets) {
       this.mapLoaded = false;
     } else {
       this.mapLoaded = true;
-    }
-
-  }
-
+    };
+  };
 }

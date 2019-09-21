@@ -1,14 +1,22 @@
-.container {
+/* .container {
    justify-content: center;
   }
   
   .outer-container {
     justify-content: center;
     margin: auto;
+  } */
+
+  table {
+    width: 100%;
+  }
+
+  th {
+    font-size: 20px;
   }
   
-  .center {
-    text-align: center;
+  td, th {
+    width: 33%;
   }
   #map {
     margin: 20px;

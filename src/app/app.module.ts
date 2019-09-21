@@ -23,6 +23,7 @@ import { ActiveMeetupsComponent } from './active-meetups/active-meetups.componen
 import { NewMeetupComponent } from './new-meetup/new-meetup.component';
 import { LogComponent } from './log/log.component';
 import { LogDetailsComponent } from './log-details/log-details.component';
+import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 import { MeetupDetailsComponent } from './meetup-details/meetup-details.component';
 
 import { AuthGuard } from './auth/auth.guard';
@@ -42,6 +43,7 @@ export function tokenGetter() {
     NewMeetupComponent,
     LogComponent,
     LogDetailsComponent,
+    AdminPortalComponent,
     MeetupDetailsComponent
   ],
   imports: [
