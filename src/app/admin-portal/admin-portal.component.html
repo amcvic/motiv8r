@@ -1,17 +1,25 @@
 <h2>motiv8d Users</h2>
-<div class='container mat-elevation-z8'>
+<div class="container">
     <table mat-table [dataSource]="dataSource">
         
         <ng-container matColumnDef="userid">
             <th mat-header-cell *matHeaderCellDef> User ID </th>
-            <td mat-cell *matCellDef="let meetups"> {{users.id}} </td>        
+            <td mat-cell *matCellDef="let user"> {{user.id}} </td>        
           </ng-container>
 
         <ng-container matColumnDef="username">
           <th mat-header-cell *matHeaderCellDef> Username </th>
-          <td mat-cell *matCellDef="let meetups"> {{users.username}} </td>
+          <td mat-cell *matCellDef="let user"> {{user.username}} </td>
         </ng-container>
+
+        <ng-container matColumnDef="delete">
+            <th mat-header-cell *matHeaderCellDef>Delete User</th>
+            <td mat-cell *matCellDef="let user">
+              <button (click)="deleteUser(user)" mat-button>X</button>
+            </td>
+          </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
+</div>

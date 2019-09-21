@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../user';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-admin-portal',
@@ -12,19 +13,27 @@ export class AdminPortalComponent implements OnInit {
   dataSource: User[];
   displayedColumns: string[];
 
-  constructor() { }
+  constructor(private authService: AuthService) { }
 
-  // showUsers():void {
-  //   this.getUsers()
-  //     .subscribe((response) => { 
-  //       this.users = (response);
-  //         console.log(this.users) });
+  showUsers():void {
+    this.authService.getAllUsers()
+      .subscribe((response) => { 
+        this.users = (response);
+        console.log(this.users);
+        this.displayedColumns= ['userid', 'username', 'delete'];
+        this.dataSource = this.users;
+      });
+  }; 
 
-  //       this.displayedColumns= ['userid', 'username'];
-  //       this.dataSource = this.users;
-  //     }; 
+  deleteUser(user): void {
+    this.authService.deleteUser(user.id)
+      .subscribe((response) => {
+        console.log(response);
+        this.showUsers();
+      });
+  }
 
-      ngOnInit() {
-        // this.showUsers()
-      };
+  ngOnInit() {
+    this.showUsers()
+  };
 }

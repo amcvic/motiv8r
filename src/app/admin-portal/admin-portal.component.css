@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    justify-content: center;
+}
+  
+table {
+    width: 100%;
+}
+  
+th {
+    font-size: 15px;
+}
+    
+td, th {
+    width: 33%;
+}
