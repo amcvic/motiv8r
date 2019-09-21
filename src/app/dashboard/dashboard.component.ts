@@ -32,8 +32,6 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[];
   dataSource: Meetup[];
   graphData: Log[];
-
-  chart: Log[];
     
   openDialog() {
     this.meetupService.editMode = false;
@@ -97,8 +95,9 @@ export class DashboardComponent implements OnInit {
     .subscribe((response) => {
       console.log(response);
       this.graphData = (response);
+      console.log('logs gotten, displaying chart');
+      this.displayChart();
       // console.log(this.graphData);
-      this.chart = []
     })
   };
 
@@ -124,6 +123,9 @@ export class DashboardComponent implements OnInit {
       ("0" + (+currentDate.getMonth()+1)).slice(-2);
     this.nextMonth = currentDate.getFullYear() + '-' +
     ("0" + (+currentDate.getMonth()+2)).slice(-2);
+    if (this.nextMonth.substring(5,7) == '13') {
+      this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+    }
 
     console.log('this month', this.month, 'next month', this.nextMonth)
 
@@ -134,29 +136,38 @@ export class DashboardComponent implements OnInit {
       this.locationY = position.coords.latitude;
       console.log(this.locationX, this.locationY);
       this.showDashResponse();
-    })
+    });
+    this.showGraphData();
+ 
+  }
+
+  displayChart(): void {
+    console.log('chart going to be rendered');
     let chart = new CanvasJS.Chart("chartContainer", {
       animationEnabled: true,
+      theme: "light2",
       exportEnabled: true,
       title: {
         text: "Meetup Activity"
       },
+      axisY:{
+        includeZero: true
+      },
 
 
-      graphData: [{
-        type: "column",
+      data: [{
+        type: "line",
         dataPoints: [
-          { y: 1, label: "Week 1" },
-          { y: 2, label: "Week 2" },
-          { y: 3, label: "Week 3" },
-          { y: 4, label: "Week 4" },
-          { y: 5, label: "Week 5" },
-          { y: 6, label: "Week 6" },
+            {y: this.graphData.length, label: 'Week 1'},
+            {y: this.graphData.length, label: 'Week 2'},
+            {y: this.graphData.length, label: 'Week 3'},
+            {y: this.graphData.length, label: 'Week 4'}
         ]
       }]
     });
-    this.showGraphData()
+    
     chart.render();
+    console.log('chart rendered');
   }
 
 }
