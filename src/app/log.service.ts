@@ -36,6 +36,7 @@ export class LogService {
   }
 
   getLogs (month: string, nextMonth: string): Observable<Log[]> {
+    console.log(APIURL+this.logUrl+'/getall');
     return this.http.post<Log[]>(APIURL+this.logUrl+'/getall', {minMonth: month, maxMonth: nextMonth}, this.httpOptions)
       .pipe(
         catchError(this.handleError<Log[]>('get logs'))

@@ -7,6 +7,9 @@ import { NewMeetupComponent } from '../new-meetup/new-meetup.component';
 import { MeetupService } from '../meetup.service';
 import { Meetup } from '../meetup';
 
+import { LogService } from '../log.service';
+import { Log } from '../log';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -23,9 +26,11 @@ export class DashboardComponent implements OnInit {
 
   displayedColumns: string[];
   dataSource: Meetup[];
-  graphData: Meetup[];
+  graphData: Log[];
 
-  chart: string[];
+  chart: Log[];
+  
+  
     
   openDialog() {
     const dialogConfig = new MatDialogConfig();
@@ -36,7 +41,11 @@ export class DashboardComponent implements OnInit {
     this.dialog.open(NewMeetupComponent, dialogConfig);
   }
 
-  constructor(private dialog: MatDialog, private meetupService: MeetupService) { }
+  constructor(private dialog: MatDialog, private meetupService: MeetupService, private logService: LogService) { }
+
+  private logs: Log[] = [];
+  private month: string = '';
+  private nextMonth: string = '';
 
   dateTrim(myMeets) {
     //modify the yyyy/mo/day format to populate on the page.
@@ -52,24 +61,58 @@ export class DashboardComponent implements OnInit {
         // console.log(response);
         this.myMeets = (response);
         console.log(this.myMeets);
+        this.myMeets = this.myMeets.filter(function(meetup) {
+          console.log(meetup);
+          if(meetup) {
+            var dt = new Date();
+            var df = new Date(meetup.date);
+            if(df.getTime() > dt.getTime())
+              return df;
+            }
+          });
         this.displayedColumns = ['name', 'date', 'description'];
     // console.log(this.myMeets);
     this.dateTrim(this.myMeets);
+    // this.myMeets = (response);
+        
+    // const now = Date.now();
+    // const futureDates = this.dateTrim.filter(date => {
+    //   return date && (new Date(date)).getTime() > now;
+    // });
+    // console.log(futureDates.length);
     this.dataSource = this.myMeets;
       });
   };
 
   showGraphData():void {
-    this.meetupService.getMeetups(this.locationX, this.locationY)
+    console.log(this.month, this.nextMonth);
+    this.logService.getLogs(this.month, this.nextMonth)
     .subscribe((response) => {
       console.log(response);
       this.graphData = (response);
-      console.log(this.graphData);
+      // console.log(this.graphData);
       this.chart = []
     })
   };
     
   ngOnInit() {
+
+    let currentDate: Date = new Date()
+
+    // convertToDateTimeString(date: Date): string {
+    //   return (date.getFullYear() + '-' + 
+    //   ("0" + (+date.getMonth()+1)).slice(-2) + '-' + 
+    //   ("0" + (date.getDate())).slice(-2) + ' 00:00:00-04');
+    // }
+
+    this.month = currentDate.getFullYear() + '-' +
+      ("0" + (+currentDate.getMonth()+1)).slice(-2);
+    this.nextMonth = currentDate.getFullYear() + '-' +
+    ("0" + (+currentDate.getMonth()+2)).slice(-2);
+
+    console.log('this month', this.month, 'next month', this.nextMonth)
+
+    // console.log(("0"+(currentDate.getMonth()+1)).slice(-2) + '-' + "0" + (currentDate.getDate())).slice(-2)));
 
     navigator.geolocation.getCurrentPosition((position) => {
       this.locationX = position.coords.longitude;
