@@ -20,7 +20,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
   <div *ngIf='activeMeets' id='map' class='map'> 
-    {{mapLoaded ? null : loadMap()}}
+    {{mapLoaded ? undefined : loadMap()}}
   </div>  
 </div>
   <div class='outer-container'>

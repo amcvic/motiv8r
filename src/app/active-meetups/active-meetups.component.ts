@@ -1,6 +1,9 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+
+import {MatDialogConfig, MatDialog} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 
+import {MeetupDetailsComponent} from '../meetup-details/meetup-details.component';
 import {MeetupService} from '../meetup.service';
 import {Meetup} from '../meetup';
 
@@ -22,13 +25,13 @@ import { defaults } from 'ol/interaction';
 import { fromLonLat, transform } from 'ol/proj';
 import { map } from 'rxjs/operators';
 
-  @Component({
-    selector: 'app-active-meetups',
-    templateUrl: './active-meetups.component.html',
-    styleUrls: ['./active-meetups.component.css']
-  })
+@Component({
+  selector: 'app-active-meetups',
+  templateUrl: './active-meetups.component.html',
+  styleUrls: ['./active-meetups.component.css']
+})
   
-  export class ActiveMeetupsComponent implements OnInit {
+export class ActiveMeetupsComponent implements OnInit {
   
   meetups: Meetup[];
   dataSource: Meetup[];
@@ -50,14 +53,23 @@ import { map } from 'rxjs/operators';
   private activeMeets: boolean = false;
   private mapLoaded: boolean = false;
 
-  constructor(private renderer: Renderer2, private meetupService: MeetupService) { }
+  constructor(private dialog: MatDialog, private renderer: Renderer2, private meetupService: MeetupService) { }
+  
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
 
-dateTrim() {
-  for (let i=0; i < this.meetups.length; i++) {
-    this.meetups[i].date = this.meetups[i].date.substring(0,10); 
-    console.log (this.meetups[i].date);
+    this.dialog.open(MeetupDetailsComponent, dialogConfig);
   }
-};
+
+  dateTrim() {
+    for (let i=0; i < this.meetups.length; i++) {
+      this.meetups[i].date= this.meetups[i].date.substring(0,10); 
+      console.log (this.meetups[i].date);
+    }
+  }
 
 makeMarker() {
   for (let i=0; i < this.meetups.length; i++) {
@@ -66,9 +78,10 @@ makeMarker() {
         fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY])
         )
       }));
-      feature.set('id', this.meetups[i].id)
+      feature.set('id', this.meetups[i].id);
       this.vectorSource.addFeature(feature);
     }
+
     let features = this.vectorSource.getFeatures();
     console.log(features);
     features.forEach(el => {
@@ -81,6 +94,11 @@ makeMarker() {
         }))
       }))
     });
+  }
+
+  openMeetup = (meetup: Meetup): void => {
+    this.meetupService.currentMeetup = meetup;
+    this.openDialog();
   }
 
   showActiveMeetups():void {
@@ -102,19 +120,37 @@ makeMarker() {
         this.dateTrim();
         this.makeMarker();
         this.dataSource = this.meetups;
-        console.log(this.map);
-      })}; 
 
-      toggle(): void {
-        this.activeMeets = !this.activeMeets;
-        if (!this.activeMeets) {
-          this.mapLoaded = false;
-        }
-      }
+        let tempMap = this.map;
+        let tempMeetups = this.meetups;
+        let tempMeetup: Meetup;
+        let self = this;
 
-    ngOnInit() {
-      this.loadMap();
+        this.map.on('singleclick', function(e) {
+          tempMap.forEachFeatureAtPixel(e.pixel, function(feature) {
+            tempMeetups.forEach(e => {
+              if (e.id === feature.get('id')) {
+                tempMeetup = e;
+                self.openMeetup(tempMeetup);
+                console.log(e);
+              }
+            });
+          });
+        });
+      });
+  }; 
+
+  toggle(): void {
+    this.activeMeets = !this.activeMeets;
+    if (!this.activeMeets) {
+      this.mapLoaded = false;
     }
+  }
+
+  ngOnInit() {
+    this.loadMap();
+  }
+
   loadMap(): void {
     navigator.geolocation.getCurrentPosition((position) => {
       this.locationY = position.coords.latitude;
@@ -160,21 +196,7 @@ makeMarker() {
         layers: [this.layer, this.markerLayer],
         view: this.view
       });
-      let tempMap = this.map;
-      let tempMeetups = this.meetups;
-      let currentMeetup: Meetup;
-      this.map.on('singleclick', function(e) {
-        tempMap.forEachFeatureAtPixel(e.pixel, function(feature) {
-          console.log(feature.get('id'));
-          tempMeetups.forEach(e => {
-            if (e.id === feature.get('id')) {
-              currentMeetup = e;
-              console.log(e);
-            }
-          })
-        })
-      });
-      this.meetupService.currentMeetup = currentMeetup;
+
       console.log('map should be loaded');
       this.showActiveMeetups();
     })
@@ -184,4 +206,4 @@ makeMarker() {
       this.mapLoaded = true;
     };
   };
-  }
+}

@@ -27,5 +27,6 @@
   <button *ngIf='loginMode' type='submit' mat-button>Submit</button>
 </form>
 <div class='outer-container'>
-  <button mat-button (click)='toggle();'>Switch to Login</button>
+  <button *ngIf='loginMode' mat-button (click)='toggle();'>Switch to Signup</button>
+  <button *ngIf='!loginMode' mat-button (click)='toggle();'>Switch to Login</button>
 </div>
