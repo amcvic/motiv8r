@@ -22,6 +22,7 @@ import { ActiveMeetupsComponent } from './active-meetups/active-meetups.componen
 import { NewMeetupComponent } from './new-meetup/new-meetup.component';
 import { LogComponent } from './log/log.component';
 import { LogDetailsComponent } from './log-details/log-details.component';
+import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LogDetailsComponent } from './log-details/log-details.component';
     ActiveMeetupsComponent,
     NewMeetupComponent,
     LogComponent,
-    LogDetailsComponent
+    LogDetailsComponent,
+    AdminPortalComponent
   ],
   imports: [
     BrowserModule,

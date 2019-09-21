@@ -1,4 +1,4 @@
-.container {
+/* .container {
    justify-content: center;
   }
   
@@ -9,4 +9,16 @@
   
   .center {
     text-align: center;
+  } */
+
+  table {
+    width: 100%;
+  }
+
+  th {
+    font-size: 20px;
+  }
+  
+  td, th {
+    width: 33%;
   }

@@ -3,7 +3,6 @@ import {MatTableDataSource} from '@angular/material/table';
 
 import {MeetupService} from '../meetup.service';
 import {Meetup} from '../meetup';
-import { LogService } from '../log.service';
 
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
@@ -41,8 +40,6 @@ import { map } from 'rxjs/operators';
   source: OlXYZ;
   layer: OlTileLayer;
   view: OlView;
-  // latitude: number;
-  // longitude: number;
 
   currentLocationMarker: OlFeature;
   vectorSource: OlSourceVector;
@@ -57,16 +54,16 @@ import { map } from 'rxjs/operators';
 
 dateTrim() {
   for (let i=0; i < this.meetups.length; i++) {
-    this.meetups[i].date= this.meetups[i].date.substring(0,10); 
+    this.meetups[i].date = this.meetups[i].date.substring(0,10); 
     console.log (this.meetups[i].date);
   }
-}
+};
 
-  makeMarker() {
-    for (let i=0; i < this.meetups.length; i++) {
-      let feature: OlFeature = (new OlFeature({
-        geometry: new OlGeomPoint(
-          fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY]) //** */
+makeMarker() {
+  for (let i=0; i < this.meetups.length; i++) {
+    let feature: OlFeature = (new OlFeature({
+      geometry: new OlGeomPoint(
+        fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY])
         )
       }));
       feature.set('id', this.meetups[i].id)
@@ -74,26 +71,35 @@ dateTrim() {
     }
     let features = this.vectorSource.getFeatures();
     console.log(features);
-      features.forEach(el => {
-        el.setStyle(new OlStyle({
-          image: new OlIcon(({
-            anchor: [0.5,1],
-            crossOrigin: 'anonymous',
-            scale: 0.07,
-            src: '../../assets/map-marker.png'
-          }))
+    features.forEach(el => {
+      el.setStyle(new OlStyle({
+        image: new OlIcon(({
+          anchor: [0.5,1],
+          crossOrigin: 'anonymous',
+          scale: 0.07,
+          src: '../../assets/map-marker.png'
         }))
-      });
+      }))
+    });
   }
 
   showActiveMeetups():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
       .subscribe((response) => { 
         this.meetups = (response);
+        this.meetups = this.meetups.filter(function(meetup) {
+          console.log(meetup);
+          if(meetup) {
+            var dt = new Date();
+            var df = new Date(meetup.date);
+            if(df.getTime() > dt.getTime())
+              return df;
+            }
+        })
         console.log(this.meetups);
         this.displayedColumns= ['name', 'date', 'description'];
 
-        // this.dateTrim();
+        this.dateTrim();
         this.makeMarker();
         this.dataSource = this.meetups;
         console.log(this.map);
@@ -109,7 +115,6 @@ dateTrim() {
     ngOnInit() {
       this.loadMap();
     }
-
   loadMap(): void {
     navigator.geolocation.getCurrentPosition((position) => {
       this.locationY = position.coords.latitude;
@@ -117,7 +122,7 @@ dateTrim() {
       this.source = new OlXYZ({
         url: 'http://tile.osm.org/{z}/{x}/{y}.png'
       })
-  
+
       this.layer = new OlTileLayer({
         source: this.source
       });
@@ -172,15 +177,11 @@ dateTrim() {
       this.meetupService.currentMeetup = currentMeetup;
       console.log('map should be loaded');
       this.showActiveMeetups();
-      
-    });
-
+    })
     if (!this.activeMeets) {
       this.mapLoaded = false;
     } else {
       this.mapLoaded = true;
-    }
-
+    };
+  };
   }
-
-}
