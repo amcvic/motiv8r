@@ -3,6 +3,7 @@ import { Observable, of } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { Log } from './log';
+import { ExerciseResponse } from './exercise';
 import { APIURL } from '../environments/environment.prod';
 
 @Injectable({
@@ -17,6 +18,7 @@ export class LogService {
   }
 
   private logUrl = '/log';
+  private exerciseUrl = 'https://wger.de/api/v2/exercise/?page=';
   
   public currentLog: Log;
   public refreshLogs: boolean = false;
@@ -36,10 +38,17 @@ export class LogService {
   }
 
   getLogs (month: string, nextMonth: string): Observable<Log[]> {
-    console.log(APIURL+this.logUrl+'/getall');
     return this.http.post<Log[]>(APIURL+this.logUrl+'/getall', {minMonth: month, maxMonth: nextMonth}, this.httpOptions)
       .pipe(
         catchError(this.handleError<Log[]>('get logs'))
+      )
+  }
+
+  getIdeas(): Observable<ExerciseResponse> {
+    let randomNum: number = Math.floor(Math.random()*Math.floor(30));
+    return this.http.get<ExerciseResponse>(this.exerciseUrl + randomNum, this.httpOptions)
+      .pipe(
+        catchError(this.handleError<ExerciseResponse>('get ideas'))
       )
   }
 

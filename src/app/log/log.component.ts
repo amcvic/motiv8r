@@ -3,6 +3,7 @@ import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { LogService } from '../log.service';
 import { Log } from '../log';
+import { Exercise } from '../exercise';
 
 import { MatDialog, MatDialogConfig, MatCalendar } from '@angular/material';
 import { MatCalendarCellCssClasses } from '@angular/material';
@@ -22,6 +23,8 @@ export class LogComponent implements OnInit {
   private points: number;
 
   private logs: Log[] = [];
+  private exercises: Exercise[];
+  public idea: Exercise = null;
   private currentMonth: string = '';
   private nextMonth: string = '';
 
@@ -54,6 +57,16 @@ export class LogComponent implements OnInit {
         }
         this.calendar.updateTodaysDate();
       });
+  }
+
+  getIdeas(): void {
+    this.logService.getIdeas()
+      .subscribe((response) => {
+        let randomNum = Math.floor(Math.random() * Math.floor(21));
+        console.log(randomNum);
+        this.idea= response.results[randomNum];
+        console.log(this.idea.license_author, this.idea.name, this.idea.description);
+      })
   }
 
   dateClass(): MatCalendarCellCssClasses {
@@ -107,6 +120,7 @@ export class LogComponent implements OnInit {
     }
     this.getLogs(this.currentMonth, this.nextMonth);
     this.getUser(+localStorage.getItem('userid'));
+    this.getIdeas();
   }
 
   ngAfterViewInit() {
