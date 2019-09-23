@@ -3,6 +3,7 @@ import { Component, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { LogService } from '../log.service';
 import { Log } from '../log';
+import { Exercise } from '../exercise';
 
 import { MatDialog, MatDialogConfig, MatCalendar } from '@angular/material';
 import { MatCalendarCellCssClasses } from '@angular/material';
@@ -22,6 +23,8 @@ export class LogComponent implements OnInit {
   public points: number;
 
   private logs: Log[] = [];
+  private exercises: Exercise[];
+  public idea: Exercise = null;
   private currentMonth: string = '';
   private nextMonth: string = '';
 
@@ -47,9 +50,23 @@ export class LogComponent implements OnInit {
   getLogs(month: string, nextMonth: string): void {
     this.logService.getLogs(month, nextMonth)
       .subscribe((response) => {
-        this.logs = response;
+        if (response) {
+          this.logs = response.filter((log) => {
+            return log.owner == +localStorage.getItem('userid');
+          });
+        }
         this.calendar.updateTodaysDate();
       });
+  }
+
+  getIdeas(): void {
+    this.logService.getIdeas()
+      .subscribe((response) => {
+        let randomNum = Math.floor(Math.random() * Math.floor(21));
+        console.log(randomNum);
+        this.idea= response.results[randomNum];
+        console.log(this.idea.license_author, this.idea.name, this.idea.description);
+      })
   }
 
   dateClass(): MatCalendarCellCssClasses {
@@ -63,6 +80,9 @@ export class LogComponent implements OnInit {
   monthSelected(date): void {
     this.currentMonth = this.convertToDateTimeString(date).substring(0,7);
     this.nextMonth = date.getFullYear()+"-"+("0"+(+date.getMonth()+2)).slice(-2);
+    if (this.nextMonth.substring(5,7) == '13') {
+      this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+    }
     this.getLogs(this.currentMonth, this.nextMonth);
   }
 
@@ -95,8 +115,12 @@ export class LogComponent implements OnInit {
   ngOnInit() {
     this.currentMonth = this.convertToDateTimeString(new Date()).substring(0,7);
     this.nextMonth = (new Date()).getFullYear()+"-"+("0"+(+(new Date()).getMonth()+2)).slice(-2);
+    if (this.nextMonth.substring(5,7) == '13') {
+      this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+    }
     this.getLogs(this.currentMonth, this.nextMonth);
     this.getUser(+localStorage.getItem('userid'));
+    this.getIdeas();
   }
 
   ngAfterViewInit() {
@@ -107,6 +131,9 @@ export class LogComponent implements OnInit {
         this.renderer.listen(button, "click", () => {
           this.currentMonth = this.convertToDateTimeString(this.calendar.activeDate).substring(0,7);
           this.nextMonth = this.calendar.activeDate.getFullYear()+"-"+("0"+(+this.calendar.activeDate.getMonth()+2)).slice(-2);
+          if (this.nextMonth.substring(5,7) == '13') {
+            this.nextMonth = (+this.nextMonth.substring(0,4)+1) + '-01';
+          }
           this.getLogs(this.currentMonth, this.nextMonth);
         });
       });

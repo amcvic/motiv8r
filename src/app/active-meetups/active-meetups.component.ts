@@ -1,9 +1,11 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
+
+import {MatDialogConfig, MatDialog} from '@angular/material/dialog';
 import {MatTableDataSource} from '@angular/material/table';
 
+import {MeetupDetailsComponent} from '../meetup-details/meetup-details.component';
 import {MeetupService} from '../meetup.service';
 import {Meetup} from '../meetup';
-import { LogService } from '../log.service';
 
 import OlMap from 'ol/Map';
 import OlXYZ from 'ol/source/XYZ';
@@ -23,13 +25,13 @@ import { defaults } from 'ol/interaction';
 import { fromLonLat, transform } from 'ol/proj';
 import { map } from 'rxjs/operators';
 
-  @Component({
-    selector: 'app-active-meetups',
-    templateUrl: './active-meetups.component.html',
-    styleUrls: ['./active-meetups.component.css']
-  })
+@Component({
+  selector: 'app-active-meetups',
+  templateUrl: './active-meetups.component.html',
+  styleUrls: ['./active-meetups.component.css']
+})
   
-  export class ActiveMeetupsComponent implements OnInit {
+export class ActiveMeetupsComponent implements OnInit {
   
   meetups: Meetup[];
   dataSource: Meetup[];
@@ -41,8 +43,6 @@ import { map } from 'rxjs/operators';
   source: OlXYZ;
   layer: OlTileLayer;
   view: OlView;
-  // latitude: number;
-  // longitude: number;
 
   currentLocationMarker: OlFeature;
   vectorSource: OlSourceVector;
@@ -53,60 +53,103 @@ import { map } from 'rxjs/operators';
   public activeMeets: boolean = false;
   public mapLoaded: boolean = false;
 
-  constructor(private renderer: Renderer2, private meetupService: MeetupService) { }
+  constructor(private dialog: MatDialog, private renderer: Renderer2, private meetupService: MeetupService) { }
+  
+  openDialog() {
+    const dialogConfig = new MatDialogConfig();
+    
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
 
-dateTrim() {
-  for (let i=0; i < this.meetups.length; i++) {
-    this.meetups[i].date= this.meetups[i].date.substring(0,10); 
-    console.log (this.meetups[i].date);
+    this.dialog.open(MeetupDetailsComponent, dialogConfig);
   }
-}
 
-  makeMarker() {
-    for (let i=0; i < this.meetups.length; i++) {
-      this.vectorSource.addFeature((new OlFeature({
-        geometry: new OlGeomPoint(
-          fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY]) //** */
+  // dateTrim() {
+  //   for (let i=0; i < this.meetups.length; i++) {
+  //     this.meetups[i].date= this.meetups[i].date.substring(0,10); 
+  //     console.log (this.meetups[i].date);
+  //   }
+  // }
+
+makeMarker() {
+  for (let i=0; i < this.meetups.length; i++) {
+    let feature: OlFeature = (new OlFeature({
+      geometry: new OlGeomPoint(
+        fromLonLat([this.meetups[i].locationX, this.meetups[i].locationY])
         )
-      })));
+      }));
+      feature.set('id', this.meetups[i].id);
+      this.vectorSource.addFeature(feature);
     }
+
     let features = this.vectorSource.getFeatures();
     console.log(features);
-      features.forEach(el => {
-        el.setStyle(new OlStyle({
-          image: new OlIcon(({
-            anchor: [0.5,1],
-            crossOrigin: 'anonymous',
-            scale: 0.07,
-            src: '../../assets/map-marker.png'
-          }))
+    features.forEach(el => {
+      el.setStyle(new OlStyle({
+        image: new OlIcon(({
+          anchor: [0.5,1],
+          crossOrigin: 'anonymous',
+          scale: 0.07,
+          src: '../../assets/map-marker.png'
         }))
-      });
+      }))
+    });
+  }
+
+  openMeetup = (meetup: Meetup): void => {
+    this.meetupService.currentMeetup = meetup;
+    this.openDialog();
   }
 
   showActiveMeetups():void {
     this.meetupService.getMeetups(this.locationX, this.locationY)
       .subscribe((response) => { 
         this.meetups = (response);
+        this.meetups = this.meetups.filter(function(meetup) {
+          console.log(meetup);
+          if(meetup) {
+            var dt = new Date();
+            var df = new Date(meetup.date);
+            if(df.getTime() > dt.getTime())
+              return df;
+            }
+        })
         console.log(this.meetups);
         this.displayedColumns= ['name', 'date', 'description'];
 
         // this.dateTrim();
         this.makeMarker();
         this.dataSource = this.meetups;
-        console.log(this.map);
-      })}; 
 
-      toggle(): void {
-        this.activeMeets = !this.activeMeets;
-        if (!this.activeMeets) {
-          this.mapLoaded = false;
-        }
-      }
+        let tempMap = this.map;
+        let tempMeetups = this.meetups;
+        let tempMeetup: Meetup;
+        let self = this;
 
-    ngOnInit() {
-      this.loadMap();
+        this.map.on('singleclick', function(e) {
+          tempMap.forEachFeatureAtPixel(e.pixel, function(feature) {
+            tempMeetups.forEach(e => {
+              if (e.id === feature.get('id')) {
+                tempMeetup = e;
+                self.openMeetup(tempMeetup);
+                console.log(e);
+              }
+            });
+          });
+        });
+      });
+  }; 
+
+  toggle(): void {
+    this.activeMeets = !this.activeMeets;
+    if (!this.activeMeets) {
+      this.mapLoaded = false;
     }
+  }
+
+  ngOnInit() {
+    this.loadMap();
+  }
 
   loadMap(): void {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -115,7 +158,7 @@ dateTrim() {
       this.source = new OlXYZ({
         url: 'http://tile.osm.org/{z}/{x}/{y}.png'
       })
-  
+
       this.layer = new OlTileLayer({
         source: this.source
       });
@@ -153,66 +196,14 @@ dateTrim() {
         layers: [this.layer, this.markerLayer],
         view: this.view
       });
+
       console.log('map should be loaded');
       this.showActiveMeetups();
-      
-    });
-
+    })
     if (!this.activeMeets) {
       this.mapLoaded = false;
     } else {
       this.mapLoaded = true;
-    }
-
-  }
-
+    };
+  };
 }
-  
-  
-  
-      // this.translate.on('translating', function (evt) {
-      //   this.coordMarker = this.marker.getGeometry().getCoordinates();
-      //   console.log(this.coordMarker);
-      // });
-
-    
-
-  //   for (var i=0; i<10; i++) {
-  //   this.vectorSource.addFeature(new OlFeature({
-  //     geometry: new OlGeomPoint(
-  //       fromLonLat([this.longitude, this.latitude]) //** */
-  //     )
-  //   }));
-  // }
-
-    // this.marker.setStyle(new OlStyle({
-    //   image: new OlIcon(({
-    //     anchor: [0.5,1],
-    //     crossOrigin: 'anonymous',
-    //     scale: 0.07,
-    //     src: '../../assets/map-marker.png'
-    //   }))
-    // }));
-
-  
-
-  // submit(name: string, description: string, date: string, time: string, prereqs: string): void {
-  //   console.log(transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326'));
-  //   if (!name || !description || !date || !time) {
-  //     return;
-  //   } else {
-  //     let coords: number[] = transform((<OlGeomPoint>this.marker.getGeometry()).getCoordinates(), 'EPSG:3857', 'EPSG:4326');
-  //     let arr: string[] = [];
-  //     arr.push(prereqs);
-  //     let timestamp: string = date + ' ' + time + ':00-04';
-  //     this.meetupService.submitMeetup(name, description, timestamp, coords[0], coords[1], arr)
-  //       .subscribe((response) => {
-  //         console.log(response);
-  //       });
-  //     this.logService.createLog(name, timestamp)
-  //       .subscribe((response) => {
-  //         console.log(response);
-  //       })
-  //     this.close();
-  //   }
-  // }
