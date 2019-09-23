@@ -7,50 +7,48 @@
 </ul> -->
 
 <div class="container">
-    <div class='inner'>
-      <table mat-table [dataSource]="dataSource">
+  <div class='inner'>
+    <table mat-table [dataSource]="dataSource">
         
-        <!-- Name Column -->
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef> Name </th>
-          <td (click)="openDialogInEditMode(myMeets)" mat-cell *matCellDef="let myMeets"> {{myMeets.name}} </td>
-        </ng-container>
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td (click)="openDialogInEditMode(myMeets)" mat-cell *matCellDef="let myMeets"> {{myMeets.name}} </td>
+      </ng-container>
 
-        <!-- Date Column -->
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef> Date </th>
-          <td id="date" (click)="openDialogInEditMode(myMeets)" mat-cell *matCellDef="let myMeets"> {{myMeets.date.substring(0,10)}} </td>
-        </ng-container> 
+       <!-- Date Column -->
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td id="date" (click)="openDialogInEditMode(myMeets)" mat-cell *matCellDef="let myMeets"> {{myMeets.date.substring(0,10)}} </td>
+      </ng-container> 
     
-        <!-- Intensity Column -->
-        <ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef> Description </th>
-          <td (click)="openDialogInEditMode(myMeets)" mat-cell *matCellDef="let myMeets"> {{myMeets.description}} </td>
-        </ng-container>
+      <!-- Intensity Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Description </th>
+        <td (click)="openDialogInEditMode(myMeets)" mat-cell *matCellDef="let myMeets"> {{myMeets.description}} </td>
+      </ng-container>
         
-        <ng-container matColumnDef="delete">
-          <th mat-header-cell *matHeaderCellDef>Delete Meetup</th>
-          <td mat-cell *matCellDef="let myMeets">
-            <button (click)="deleteMeetup(myMeets)" mat-button>X</button>
-          </td>
-        </ng-container>
-        <!-- Symbol Column -->
-        <!-- <ng-container matColumnDef="symbol">
-          <th mat-header-cell *matHeaderCellDef> Symbol </th>
-          <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
-        </ng-container> -->
-        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
- 
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>Delete Meetup</th>
+        <td mat-cell *matCellDef="let myMeets">
+          <button (click)="deleteMeetup(myMeets)" mat-button>X</button>
+        </td>
+      </ng-container>
+      <!-- Symbol Column -->
+      <!-- <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef> Symbol </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container> -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 
-  <div>
     <button class='mat-raised-button' (click)="openDialog()">Create New Meetup</button>
+
   </div>
-</div>
 
   <div class='inner'>
-      <div id='chartContainer'></div>
+      <div id='chartContainer' class='chartContainer'></div>
   </div>
 </div>
 

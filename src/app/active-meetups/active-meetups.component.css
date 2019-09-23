@@ -12,7 +12,6 @@
 table {
   width: 80%;
   border: 1px solid black;
-  border-radius: 20px;
   }
 
 th {
@@ -23,12 +22,12 @@ td, th {
   width: 33%;
 }
 
-.mat-row:nth-child(even) {
-    background-color:rgb(106, 140, 173);
+.mat-row:nth-child(odd) {
+    background-color:rgba(153, 54, 54, 0.5);
     }
 
-.mat-row:nth-child(odd){
-    background-color:rgb(240, 240, 161);
+.mat-row:nth-child(even){
+    background-color:rgba(153, 145, 145, 0.5);
     }
 
 #map {
