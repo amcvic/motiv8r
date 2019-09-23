@@ -4,16 +4,19 @@
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
           <td (click)="openMeetup(meetups)" mat-cell *matCellDef="let meetups"> {{meetups.name}} </td>
+
         </ng-container>
       
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef> Date </th>
           <td (click)="openMeetup(meetups)" mat-cell *matCellDef="let meetups"> {{meetups.date.substring(0,10)}} </td>        
+
         </ng-container>
       
         <ng-container matColumnDef="description">
           <th mat-header-cell *matHeaderCellDef> Description </th>
           <td (click)="openMeetup(meetups)" mat-cell *matCellDef="let meetups"> {{meetups.description}} </td>
+
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns sticky:true"></tr>

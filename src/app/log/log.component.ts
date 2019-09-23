@@ -19,8 +19,8 @@ export class LogComponent implements OnInit {
 
   constructor(private dialog: MatDialog, private renderer: Renderer2, private authService: AuthService, private logService: LogService) { }
 
-  private username: string;
-  private points: number;
+  public username: string;
+  public points: number;
 
   private logs: Log[] = [];
   private exercises: Exercise[];

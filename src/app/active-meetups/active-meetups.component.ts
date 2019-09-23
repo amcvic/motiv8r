@@ -50,8 +50,8 @@ export class ActiveMeetupsComponent implements OnInit {
   translate: OlInteractionTranslate;
   defaults: OlInteraction;
 
-  private activeMeets: boolean = false;
-  private mapLoaded: boolean = false;
+  public activeMeets: boolean = false;
+  public mapLoaded: boolean = false;
 
   constructor(private dialog: MatDialog, private renderer: Renderer2, private meetupService: MeetupService) { }
   
