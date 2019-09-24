@@ -33,8 +33,13 @@ td, th {
   justify-content: flex-end;
 } */
 
-
-
 mat-cell, .mat-cell {
   padding: 12px 16px 12px 0;
+}
+.mat-row:nth-child(odd) {
+  background-color:rgba(153, 145, 145, 0.5);
+}
+
+.mat-row:nth-child(even) {
+  background-color:rgba(153, 54, 54, 0.5);
 }

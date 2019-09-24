@@ -14,6 +14,7 @@ import { MeetupDetailsComponent } from '../meetup-details/meetup-details.compone
 
 import { LogService } from '../log.service';
 import { Log } from '../log';
+import { Logs } from 'selenium-webdriver';
 
 
 @Component({
@@ -27,11 +28,16 @@ export class DashboardComponent implements OnInit {
   locationX: number;
   locationY: number;
 
+  week1: number;
+  week2: number;
+  week3: number;
+  week4: number;
+
   myMeets: Meetup[];
 
   displayedColumns: string[];
   dataSource: Meetup[];
-  graphData: Log[];
+  graphData: string[];
     
   openDialog() {
     this.meetupService.editMode = false;
@@ -51,6 +57,7 @@ export class DashboardComponent implements OnInit {
   private logs: Log[] = [];
   private month: string = '';
   private nextMonth: string = '';
+
 
   openDialogInEditMode(meetup: Meetup) {
     console.log(meetup);
@@ -89,17 +96,57 @@ export class DashboardComponent implements OnInit {
       });
   };
 
+
+
   showGraphData():void {
     console.log(this.month, this.nextMonth);
     this.logService.getLogs(this.month, this.nextMonth)
     .subscribe((response) => {
       console.log(response);
-      this.graphData = (response);
+      // this.logs = (response.filter((logs) => {
+      //   console.log(logs.date);
+      //   return logs.date;
+      // }))
       console.log('logs gotten, displaying chart');
+      response.forEach((element, i) => {
+        let day = +element.date.substring(8,10);
+        if (day > 0 && day <= 7 ) {
+          this.week1++;
+        } else if (day > 7 && day <= 14) {
+          this.week2++;
+        } else if (day > 14 && day <= 21) {
+          this.week3++;
+        } else if (day > 21) {
+          this.week4++;
+        }
+      });
       this.displayChart();
-      // console.log(this.graphData);
-    })
+    });
   };
+
+
+  //   d = new Date();
+  //   y = this.d.getFullYear();
+  //   m = this.month.substring(0,4);
+
+  // showWeeks():void {
+  //   console.log(this.month);
+  //   var weeksCount = function(y, m) {
+  //     var firstOfMonth = new Date(y, m - 1, 1);
+  //     var day = firstOfMonth.getDay() || 6;
+  //     day = day === 1 ? 0 : day;
+  //     if (day) { day-- }
+  //     var diff = 7 - day;
+  //     var lastOfMonth = new Date(y, m, 0);
+  //     var lastDate = lastOfMonth.getDate();
+  //     if (lastOfMonth.getDay() === 1) {
+  //       diff--;
+  //     }
+  //     var result = Math.ceil((lastDate - diff) / 7);
+  //     return result + 1;
+  //   };  
+  //   console.log(weeksCount(this.y, this.m));
+  // };
 
   deleteMeetup(meetup): void {
     this.meetupService.deleteMeetup(meetup.id)
@@ -111,7 +158,13 @@ export class DashboardComponent implements OnInit {
     
   ngOnInit() {
 
-    let currentDate: Date = new Date()
+    this.week1 = 0;
+    this.week2 = 0;
+    this.week3 = 0;
+    this.week4 = 0;
+
+    let currentDate: Date = new Date();
+    console.log(currentDate.getDate());
 
     // convertToDateTimeString(date: Date): string {
     //   return (date.getFullYear() + '-' + 
@@ -153,21 +206,22 @@ export class DashboardComponent implements OnInit {
       axisY:{
         includeZero: true
       },
-
-
+      
       data: [{
         type: "line",
         dataPoints: [
-            {y: this.graphData.length, label: 'Week 1'},
-            {y: this.graphData.length, label: 'Week 2'},
-            {y: this.graphData.length, label: 'Week 3'},
-            {y: this.graphData.length, label: 'Week 4'}
+            {y: this.week1, label: 'Week 1'},
+            {y: this.week2, label: 'Week 2'},
+            {y: this.week3, label: 'Week 3'},
+            {y: this.week4, label: 'Week 4'}
         ]
       }]
     });
     
     chart.render();
     console.log('chart rendered');
+    // this.showWeeks();
+
   }
 
 }
