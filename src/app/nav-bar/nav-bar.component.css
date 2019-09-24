@@ -29,3 +29,11 @@
     color: #990000;
     font-size: 17px;
   }
+
+  .titleContainer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 5px;
+  }

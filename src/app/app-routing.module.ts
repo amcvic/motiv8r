@@ -8,10 +8,11 @@ import { LogComponent } from './log/log.component';
 import { AdminPortalComponent } from './admin-portal/admin-portal.component';
 
 import { AuthGuard } from './auth/auth.guard';
+import { AdminPortalGuard } from './admin-portal/admin-portal.guard';
 
 const routes: Routes = [
   { path: 'auth', component: AuthComponent },
-  { path: 'admin', component: AdminPortalComponent},
+  { path: 'admin', component: AdminPortalComponent, canActivate: [AdminPortalGuard]},
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'meetups', component: ActiveMeetupsComponent, canActivate: [AuthGuard] },
   { path: 'log', component: LogComponent, canActivate: [AuthGuard] },
