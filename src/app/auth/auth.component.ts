@@ -22,6 +22,7 @@ export class AuthComponent implements OnInit {
         if (response.sessionToken) {
           localStorage.setItem('token', response.sessionToken);
           localStorage.setItem('userid', ""+response.user.id);
+          localStorage.setItem('username', response.user.username);
           this.authService.currentUser = response.user;
           console.log(this.authService.currentUser);
           console.log(`signed up & loggin in as user: ${response.user.username}`);
@@ -40,6 +41,7 @@ export class AuthComponent implements OnInit {
       .subscribe((response) => {
         localStorage.setItem('token', response.sessionToken);
         localStorage.setItem('userid', ""+response.user.id);
+        localStorage.setItem('username', response.user.username);
         this.authService.currentUser = response.user;
         console.log(this.authService.currentUser);
         console.log(`logged in as user: ${response.user.username}`);

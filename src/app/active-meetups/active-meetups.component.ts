@@ -64,13 +64,6 @@ export class ActiveMeetupsComponent implements OnInit {
     this.dialog.open(MeetupDetailsComponent, dialogConfig);
   }
 
-  // dateTrim() {
-  //   for (let i=0; i < this.meetups.length; i++) {
-  //     this.meetups[i].date= this.meetups[i].date.substring(0,10); 
-  //     console.log (this.meetups[i].date);
-  //   }
-  // }
-
 makeMarker() {
   for (let i=0; i < this.meetups.length; i++) {
     let feature: OlFeature = (new OlFeature({
@@ -117,7 +110,6 @@ makeMarker() {
         console.log(this.meetups);
         this.displayedColumns= ['name', 'date', 'description'];
 
-        // this.dateTrim();
         this.makeMarker();
         this.dataSource = this.meetups;
 
